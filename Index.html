@@ -1,0 +1,6096 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>1oops</title>
+<style>
+  :root{ --paper:#ece9e2; --ink:#1c1a17; --mut:#6c665c; --line:#cfc9bd; --red:#b94835; }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;overflow:hidden;background:var(--paper);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+  #cv{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+  .ui{position:fixed;z-index:2;pointer-events:none}
+  .ui *{pointer-events:auto}
+  /* brand */
+  #brand{top:22px;left:26px}
+  #brand .n{font-family:Georgia,"Times New Roman",serif;font-size:34px;letter-spacing:.5px;font-weight:400}
+  #brand .k{font-size:10px;letter-spacing:2px;color:var(--mut);margin-top:2px;font-style:italic}
+  #brand .k2{font-size:9px;letter-spacing:2px;color:var(--mut);margin-top:3px;font-style:italic}
+  /* stage prompts */
+  .hint{font-size:12px;color:var(--mut);letter-spacing:.5px;max-width:200px;line-height:1.5}
+  #hRoot{top:108px;left:30px;transform:rotate(-1.5deg)}
+  #hDens{top:110px;right:40px;text-align:right;transform:none}
+  #hCard{top:auto;bottom:26%;left:50%;transform:translateX(-50%);text-align:center}
+  #hRefl{top:62%;right:42px;text-align:right}
+  /* notes */
+  #notes{top:150px;left:30px;display:flex;flex-wrap:nowrap;gap:6px 9px;max-width:460px}
+  .nt{font-family:ui-monospace,Menlo,monospace;font-size:14px;padding:4px 9px;border:1px solid var(--line);
+      border-radius:3px;cursor:pointer;background:rgba(255,255,255,.35);user-select:none;transition:.12s}
+  .nt:hover{border-color:var(--ink)}
+  .nt.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  /* density */
+  #dens{top:300px;right:40px;display:flex;gap:16px}
+  .dm{font-size:15px;cursor:pointer;color:var(--mut);border-bottom:1px solid transparent;padding-bottom:2px}
+  .dm:hover{color:var(--ink)}
+  .dm.on{color:var(--ink);border-color:var(--ink)}
+  /* card */
+  #cardWrap{top:auto;bottom:17%;left:50%;transform:translateX(-50%)}
+  #draw{font-family:Georgia,serif;font-size:22px;cursor:pointer;background:none;border:1px solid var(--ink);
+        border-radius:40px;padding:10px 30px;letter-spacing:1px}
+  #draw:hover{background:var(--ink);color:var(--paper)}
+  /* small corners */
+  #no{position:fixed;bottom:20px;right:26px;z-index:2;font-family:ui-monospace,monospace;font-size:12px;color:#5a554c}
+  #trace{position:fixed;bottom:20px;left:26px;z-index:2;font-size:12px;color:#5a554c;cursor:pointer;letter-spacing:1px}
+  #trace:hover{color:var(--ink)}
+  #refl{position:fixed;bottom:46px;right:26px;z-index:3;max-width:230px;text-align:right;font-size:11px;color:#5a554c;
+        line-height:1.5;opacity:0;transition:.4s;pointer-events:none}
+  #refl.show{opacity:1}
+  .thin{position:fixed;background:var(--line);z-index:1}
+  #r1{top:104px;left:26px;width:120px;height:1px;transform:rotate(-1.5deg)}
+  .foot{position:fixed;bottom:46px;left:50%;transform:translateX(-50%) rotate(-.6deg);z-index:1;
+        font-size:11px;color:#5a554c;letter-spacing:3px;font-style:italic}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div class="thin" id="r1"></div>
+
+<div class="ui" id="brand"><div class="n">1oops</div><div class="k">Experimentación intuitiva·24h</div><div class="k2">Explora · Escucha · Crea</div></div>
+
+<div class="ui hint" id="hRoot">从一个音开始。<br>听它，再决定。</div>
+<div class="ui" id="notes"></div>
+
+<div class="ui hint hidden" id="hDens">三、五、七。<br>先听，再选。</div>
+<div class="ui hidden" id="dens"><span class="dm" data-d="3">三音</span><span class="dm" data-d="5">五音</span><span class="dm" data-d="7">七音</span></div>
+
+<div class="ui hint hidden" id="hCard">抽一张。<br>看它把你带去哪。</div>
+<div class="ui hidden" id="cardWrap"><button id="draw">抽</button></div>
+
+<div class="ui hint" id="hRefl">留下的，是直觉的声音。</div>
+
+<div id="no">No.----</div>
+<div id="trace">痕</div>
+<div id="refl"></div>
+<div class="foot">Todo-el-día-24h</div>
+
+<script id="data-task_pool" type="application/json">{
+  "version": "1.0.0",
+  "source": {
+    "core": "梅垣ルナ｜图解重配和声入门 50 技法",
+    "advanced": "Mark Levine｜The Jazz Piano Book Chapter 13"
+  },
+  "difficulty_bands": {
+    "entry": {
+      "label": "入门池",
+      "range": [
+        1,
+        20
+      ],
+      "unlock_condition": null
+    },
+    "transition": {
+      "label": "过渡池",
+      "range": [
+        21,
+        50
+      ],
+      "unlock_condition": "完成入门池 80%"
+    },
+    "jazz_advanced": {
+      "label": "爵士进阶包",
+      "range": [],
+      "unlock_condition": "完成全部图解 50 技法 + 通过爵士前置测验"
+    }
+  },
+  "tasks": [
+    {
+      "id": "relop_001",
+      "source_type": "core",
+      "technique_name": "同功能替换 · I→iii",
+      "category": {
+        "main": "replacement",
+        "sub": "同功能替换 · I→iii"
+      },
+      "difficulty": {
+        "score": 1,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：用同功能的三级和弦替一级，制造更柔和的开头。",
+        "theory": "用同功能的三级和弦替一级，制造更柔和的开头。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；三级=一级的弱替代；六级=一级的暗替代。"
+      },
+      "practice_spec": {
+        "goal": "用 iii 或 vi 替换原 I，写出 2 小节新开头。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-vi-ii-V",
+        "allowed_variables": [
+          "only_替换"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Cmaj7",
+            "Am7",
+            "Dm7",
+            "G7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "I→iii 开头",
+          "feeling_tag": "更飘",
+          "chord_sequence": [
+            "Em7",
+            "Am7",
+            "Dm7",
+            "G7"
+          ],
+          "voicing_hint": [
+            "把 Cmaj7 换成 Em7，色彩更轻"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "vi→I 收束",
+          "feeling_tag": "更紧张",
+          "chord_sequence": [
+            "Am7",
+            "Cmaj7"
+          ],
+          "voicing_hint": [
+            "用一级替六级作终止"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "I→vi 软化",
+          "feeling_tag": "更爵士",
+          "chord_sequence": [
+            "Am7",
+            "Dm7",
+            "G7"
+          ],
+          "voicing_hint": [
+            "主和弦换成六级，抒情"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "给出 3 种不重复的同功能替换，听感自然。"
+      },
+      "hint": {
+        "short": "三级=一级的弱替代；六级=一级的暗替代。",
+        "deep_dive": "用同功能的三级和弦替一级，制造更柔和的开头。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_002",
+      "source_type": "core",
+      "technique_name": "副属和弦替代",
+      "category": {
+        "main": "replacement",
+        "sub": "副属和弦替代"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：在目标和大调前插入其属七，形成 V7/目标 的临时调性。",
+        "theory": "在目标和大调前插入其属七，形成 V7/目标 的临时调性。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；副属的根音 = 目标和弦根音上方纯五度。"
+      },
+      "practice_spec": {
+        "goal": "为给定动机的每个非属和弦前插入一个副属。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-ii-V-I",
+        "allowed_variables": [
+          "only_替换"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Dm7",
+            "G7",
+            "Cmaj7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "V7/ii",
+          "feeling_tag": "更飘",
+          "chord_sequence": [
+            "A7",
+            "Dm7",
+            "G7",
+            "Cmaj7"
+          ],
+          "voicing_hint": [
+            "在 ii 前加 A7"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "V7/vi",
+          "feeling_tag": "更紧张",
+          "chord_sequence": [
+            "E7",
+            "Am7",
+            "Dm7",
+            "G7"
+          ],
+          "voicing_hint": [
+            "在 vi 前加 E7"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "V7/iii",
+          "feeling_tag": "更爵士",
+          "chord_sequence": [
+            "B7",
+            "Em7"
+          ],
+          "voicing_hint": [
+            "在 iii 前加 B7"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "至少 2 处副属，解决到目标和弦无违和。"
+      },
+      "hint": {
+        "short": "副属的根音 = 目标和弦根音上方纯五度。",
+        "deep_dive": "在目标和大调前插入其属七，形成 V7/目标 的临时调性。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_003",
+      "source_type": "core",
+      "technique_name": "小调借用和弦",
+      "category": {
+        "main": "replacement",
+        "sub": "小调借用和弦"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：从平行小调借来 bVI、bVII、bIII，制造暗色对比。",
+        "theory": "从平行小调借来 bVI、bVII、bIII，制造暗色对比。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；借用和弦来自 C 小调音阶。"
+      },
+      "practice_spec": {
+        "goal": "在 C 大调里引入至少一个借用和弦。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-vi-IV-V",
+        "allowed_variables": [
+          "only_替换"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "bVII 替代 IV",
+          "feeling_tag": "更飘",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "G",
+            "F"
+          ],
+          "voicing_hint": [
+            "用 bVII(Ab/Bb)替 IV"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "bVI 色彩",
+          "feeling_tag": "更紧张",
+          "chord_sequence": [
+            "C",
+            "Abmaj7",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [
+            "插 bVI 作过渡"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "bIII 替代 I",
+          "feeling_tag": "更爵士",
+          "chord_sequence": [
+            "Ebmaj7",
+            "Am",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [
+            "用 bIII 替主"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "借用和弦与邻弦共享声部，过渡平滑。"
+      },
+      "hint": {
+        "short": "借用和弦来自 C 小调音阶。",
+        "deep_dive": "从平行小调借来 bVI、bVII、bIII，制造暗色对比。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_004",
+      "source_type": "core",
+      "technique_name": "那不勒斯和弦",
+      "category": {
+        "main": "replacement",
+        "sub": "那不勒斯和弦"
+      },
+      "difficulty": {
+        "score": 3,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：用 bII 大三和弦(N6)替代下属，制造戏剧性半音下滑。",
+        "theory": "用 bII 大三和弦(N6)替代下属，制造戏剧性半音下滑。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；N6 的根音是主音下方大二度。"
+      },
+      "practice_spec": {
+        "goal": "用 N6 重写一段下属功能。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-IV-V",
+        "allowed_variables": [
+          "only_替换"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "N6 替 IV",
+          "feeling_tag": "更飘",
+          "chord_sequence": [
+            "C",
+            "Dbmaj7",
+            "G"
+          ],
+          "voicing_hint": [
+            "Db 大三和弦作下属"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "N6→V",
+          "feeling_tag": "更紧张",
+          "chord_sequence": [
+            "Dbmaj7",
+            "G7",
+            "C"
+          ],
+          "voicing_hint": [
+            "那不勒斯直接解决到属"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "N6 变体",
+          "feeling_tag": "更爵士",
+          "chord_sequence": [
+            "C",
+            "Db",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [
+            "第一转位那不勒斯"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "N6 到 V 的半音下行清晰可辨。"
+      },
+      "hint": {
+        "short": "N6 的根音是主音下方大二度。",
+        "deep_dive": "用 bII 大三和弦(N6)替代下属，制造戏剧性半音下滑。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_005",
+      "source_type": "core",
+      "technique_name": "增六和弦",
+      "category": {
+        "main": "replacement",
+        "sub": "增六和弦"
+      },
+      "difficulty": {
+        "score": 3,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：用意大利/法国/德国增六和弦替代属或下属，强烈导向主。",
+        "theory": "用意大利/法国/德国增六和弦替代属或下属，强烈导向主。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；增六和弦包含 b6 与 #4 的增六度音程。"
+      },
+      "practice_spec": {
+        "goal": "用一种增六和弦替换原属/下属。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-IV-V",
+        "allowed_variables": [
+          "only_替换"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "It+6",
+          "feeling_tag": "更飘",
+          "chord_sequence": [
+            "C",
+            "Ab",
+            "C",
+            "B7",
+            "C"
+          ],
+          "voicing_hint": [
+            "Ab-C-? 增六到主"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Fr+6",
+          "feeling_tag": "更紧张",
+          "chord_sequence": [
+            "C",
+            "A°7",
+            "C",
+            "G7",
+            "C"
+          ],
+          "voicing_hint": [
+            "法国增六"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Ger+6",
+          "feeling_tag": "更爵士",
+          "chord_sequence": [
+            "C",
+            "Eb7b5",
+            "C",
+            "G",
+            "C"
+          ],
+          "voicing_hint": [
+            "德国增六"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "增六度外音解决到主和弦八度。"
+      },
+      "hint": {
+        "short": "增六和弦包含 b6 与 #4 的增六度音程。",
+        "deep_dive": "用意大利/法国/德国增六和弦替代属或下属，强烈导向主。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_006",
+      "source_type": "core",
+      "technique_name": "半音下行替代",
+      "category": {
+        "main": "replacement",
+        "sub": "半音下行替代"
+      },
+      "difficulty": {
+        "score": 3,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：用 bIII - bII - I 的半音下行链替换终止，制造电影感。",
+        "theory": "用 bIII - bII - I 的半音下行链替换终止，制造电影感。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；每个和弦根音下移半音。"
+      },
+      "practice_spec": {
+        "goal": "构造一条长度≥3 的半音下行重配。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-V-I-vi",
+        "allowed_variables": [
+          "only_替换"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Cmaj7",
+            "G7",
+            "Cmaj7",
+            "Am7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "bIII→bII→I",
+          "feeling_tag": "更飘",
+          "chord_sequence": [
+            "Ebmaj7",
+            "Dbmaj7",
+            "Cmaj7"
+          ],
+          "voicing_hint": [
+            "三全音上的半音下滑"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "插入 bII",
+          "feeling_tag": "更紧张",
+          "chord_sequence": [
+            "C",
+            "Dbmaj7",
+            "C"
+          ],
+          "voicing_hint": [
+            "在主之间夹 bII"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "iv 链路",
+          "feeling_tag": "更爵士",
+          "chord_sequence": [
+            "Am",
+            "Abmaj7",
+            "G"
+          ],
+          "voicing_hint": [
+            "小下属半音链"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "链路听感连贯，终点回到主。"
+      },
+      "hint": {
+        "short": "每个和弦根音下移半音。",
+        "deep_dive": "用 bIII - bII - I 的半音下行链替换终止，制造电影感。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_007",
+      "source_type": "core",
+      "technique_name": "后门终止",
+      "category": {
+        "main": "replacement",
+        "sub": "后门终止"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：用 bVII7 替代 V7 作终止 (backdoor)，色彩更柔和。",
+        "theory": "用 bVII7 替代 V7 作终止 (backdoor)，色彩更柔和。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；bVII7 = 下方大二度的属七。"
+      },
+      "practice_spec": {
+        "goal": "把至少一处 V7-I 改成 bVII7-I。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-vi-ii-V",
+        "allowed_variables": [
+          "only_替换"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Cmaj7",
+            "Am7",
+            "Dm7",
+            "G7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "bVII7→I",
+          "feeling_tag": "更飘",
+          "chord_sequence": [
+            "Am7",
+            "Bb7",
+            "Cmaj7"
+          ],
+          "voicing_hint": [
+            "Bb7 作后门属"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "ii-bVII7",
+          "feeling_tag": "更紧张",
+          "chord_sequence": [
+            "Dm7",
+            "Bb7",
+            "C"
+          ],
+          "voicing_hint": [
+            "ii 接后门"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "vi-bVII7",
+          "feeling_tag": "更爵士",
+          "chord_sequence": [
+            "Am7",
+            "Bb7",
+            "C"
+          ],
+          "voicing_hint": [
+            "vi 接后门"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "后门终止解决自然，听感成立。"
+      },
+      "hint": {
+        "short": "bVII7 = 下方大二度的属七。",
+        "deep_dive": "用 bVII7 替代 V7 作终止 (backdoor)，色彩更柔和。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_008",
+      "source_type": "core",
+      "technique_name": "同主音大小调互换",
+      "category": {
+        "main": "replacement",
+        "sub": "同主音大小调互换"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：在 C 大调中借 C 小调的和弦 (Cm、Ab、Bb) 制造明暗交替。",
+        "theory": "在 C 大调中借 C 小调的和弦 (Cm、Ab、Bb) 制造明暗交替。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；共享根音 C，只换三度音。"
+      },
+      "practice_spec": {
+        "goal": "在动机里制造一次大→小的突然转调感。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-vi-IV-V",
+        "allowed_variables": [
+          "only_替换"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Cm 替 C",
+          "feeling_tag": "更飘",
+          "chord_sequence": [
+            "Cm7",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [
+            "主和弦变小"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Ab 桥接",
+          "feeling_tag": "更紧张",
+          "chord_sequence": [
+            "C",
+            "Ab",
+            "G"
+          ],
+          "voicing_hint": [
+            "借用 bVI"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Bb 下属",
+          "feeling_tag": "更爵士",
+          "chord_sequence": [
+            "C",
+            "Bb",
+            "G"
+          ],
+          "voicing_hint": [
+            "借用 bVII"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "明暗对比清楚而不突兀。"
+      },
+      "hint": {
+        "short": "共享根音 C，只换三度音。",
+        "deep_dive": "在 C 大调中借 C 小调的和弦 (Cm、Ab、Bb) 制造明暗交替。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_009",
+      "source_type": "core",
+      "technique_name": "经过属和弦",
+      "category": {
+        "main": "replacement",
+        "sub": "经过属和弦"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：在两个和弦之间插入它们上方 / 下方属七作为经过。",
+        "theory": "在两个和弦之间插入它们上方 / 下方属七作为经过。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；经过属的目标 = 后接和弦根音。"
+      },
+      "practice_spec": {
+        "goal": "在动机里插入至少一处经过属。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-IV-V",
+        "allowed_variables": [
+          "only_替换"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "C→D7→G",
+          "feeling_tag": "更飘",
+          "chord_sequence": [
+            "C",
+            "D7",
+            "G"
+          ],
+          "voicing_hint": [
+            "经过属到 G"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "F→C7→C",
+          "feeling_tag": "更紧张",
+          "chord_sequence": [
+            "F",
+            "C7",
+            "C"
+          ],
+          "voicing_hint": [
+            "经过属回主"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Am→E7→Dm",
+          "feeling_tag": "更爵士",
+          "chord_sequence": [
+            "Am",
+            "E7",
+            "Dm"
+          ],
+          "voicing_hint": [
+            "经过属到 ii"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "经过属一拍或半拍，不抢拍。"
+      },
+      "hint": {
+        "short": "经过属的目标 = 后接和弦根音。",
+        "deep_dive": "在两个和弦之间插入它们上方 / 下方属七作为经过。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_010",
+      "source_type": "core",
+      "technique_name": "二度关系替换",
+      "category": {
+        "main": "replacement",
+        "sub": "二度关系替换"
+      },
+      "difficulty": {
+        "score": 3,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：用根音上方 / 下方大二度的和弦替换，制造突然的色彩跳跃。",
+        "theory": "用根音上方 / 下方大二度的和弦替换，制造突然的色彩跳跃。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；二度替换适合短促的「撞击」效果。"
+      },
+      "practice_spec": {
+        "goal": "用二度关系替换改写一段。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-vi-IV-V",
+        "allowed_variables": [
+          "only_替换"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "I→II",
+          "feeling_tag": "更飘",
+          "chord_sequence": [
+            "Dm7",
+            "Am",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [
+            "主换到二级"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "IV→bIII",
+          "feeling_tag": "更紧张",
+          "chord_sequence": [
+            "C",
+            "Eb",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [
+            "下属换大二度下"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "V→bVI",
+          "feeling_tag": "更爵士",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "Ab",
+            "G"
+          ],
+          "voicing_hint": [
+            "属换大二度上"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "二度替换处节奏稳定，不拖沓。"
+      },
+      "hint": {
+        "short": "二度替换适合短促的「撞击」效果。",
+        "deep_dive": "用根音上方 / 下方大二度的和弦替换，制造突然的色彩跳跃。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_011",
+      "source_type": "core",
+      "technique_name": "副属连锁",
+      "category": {
+        "main": "replacement",
+        "sub": "副属连锁"
+      },
+      "difficulty": {
+        "score": 4,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：连续多个副属形成 V7/V7/... 的调性瀑布。",
+        "theory": "连续多个副属形成 V7/V7/... 的调性瀑布。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；每个属解决到下一个属，最后落 V-I。"
+      },
+      "practice_spec": {
+        "goal": "构造≥3 个副属的连锁解决。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-ii-V-I",
+        "allowed_variables": [
+          "only_替换"
+        ],
+        "challenge_mode": "five_step_journey"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Dm7",
+            "G7",
+            "Cmaj7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "A7-D7-G7-C",
+          "feeling_tag": "更飘",
+          "chord_sequence": [
+            "A7",
+            "D7",
+            "G7",
+            "Cmaj7"
+          ],
+          "voicing_hint": [
+            "三连环"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "E7-A7-D7-G7",
+          "feeling_tag": "更紧张",
+          "chord_sequence": [
+            "E7",
+            "A7",
+            "D7",
+            "G7"
+          ],
+          "voicing_hint": [
+            "四连环"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "B7-E7-A7-D7",
+          "feeling_tag": "更爵士",
+          "chord_sequence": [
+            "B7",
+            "E7",
+            "A7",
+            "D7"
+          ],
+          "voicing_hint": [
+            "向上五度链"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "整条链调性流动清晰。"
+      },
+      "hint": {
+        "short": "每个属解决到下一个属，最后落 V-I。",
+        "deep_dive": "连续多个副属形成 V7/V7/... 的调性瀑布。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_012",
+      "source_type": "core",
+      "technique_name": "共同音替换",
+      "category": {
+        "main": "replacement",
+        "sub": "共同音替换"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：用与原和弦共享多个音的和弦替换，保持声部连贯。",
+        "theory": "用与原和弦共享多个音的和弦替换，保持声部连贯。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；找共享≥2 音的替代。"
+      },
+      "practice_spec": {
+        "goal": "用共同音和弦改写一段，使低音不动。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "Am",
+        "motif_seed_id": "MOT-Am-i-iv-V",
+        "allowed_variables": [
+          "only_替换"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Am",
+            "Dm",
+            "E"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Am→C",
+          "feeling_tag": "更飘",
+          "chord_sequence": [
+            "C",
+            "Dm",
+            "E"
+          ],
+          "voicing_hint": [
+            "Am 与 C 共享 A/C/E"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Dm→Fmaj7",
+          "feeling_tag": "更紧张",
+          "chord_sequence": [
+            "Am",
+            "Fmaj7",
+            "E"
+          ],
+          "voicing_hint": [
+            "共享 D/F/A"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "E→Cmaj7/E",
+          "feeling_tag": "更爵士",
+          "chord_sequence": [
+            "Am",
+            "Dm",
+            "C",
+            "E"
+          ],
+          "voicing_hint": [
+            "共享 E/G"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "替换点和声平稳过渡。"
+      },
+      "hint": {
+        "short": "找共享≥2 音的替代。",
+        "deep_dive": "用与原和弦共享多个音的和弦替换，保持声部连贯。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_013",
+      "source_type": "core",
+      "technique_name": "九和弦叠加",
+      "category": {
+        "main": "extension",
+        "sub": "九和弦叠加"
+      },
+      "difficulty": {
+        "score": 1,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：在大/小七和弦上加 9 音，柔化色彩。",
+        "theory": "在大/小七和弦上加 9 音，柔化色彩。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；9 音=根音上方大九度。"
+      },
+      "practice_spec": {
+        "goal": "为动机每个和弦尝试加 9 音。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-ii-V-I",
+        "allowed_variables": [
+          "only_扩展"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Dm7",
+            "G7",
+            "Cmaj7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Cmaj9",
+          "feeling_tag": "更厚",
+          "chord_sequence": [
+            "Cmaj9",
+            "Am7",
+            "Dm9",
+            "G9"
+          ],
+          "voicing_hint": [
+            "全部加 9"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Dm9",
+          "feeling_tag": "更朦胧",
+          "chord_sequence": [
+            "Dm9",
+            "G9",
+            "Cmaj9"
+          ],
+          "voicing_hint": [
+            "ii、V 加 9"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "仅 V9",
+          "feeling_tag": "更温暖",
+          "chord_sequence": [
+            "Dm7",
+            "G9",
+            "Cmaj7"
+          ],
+          "voicing_hint": [
+            "只给属加 9"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "9 音不与其他音打架。"
+      },
+      "hint": {
+        "short": "9 音=根音上方大九度。",
+        "deep_dive": "在大/小七和弦上加 9 音，柔化色彩。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "ink"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_014",
+      "source_type": "core",
+      "technique_name": "属十三和弦",
+      "category": {
+        "main": "extension",
+        "sub": "属十三和弦"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：给属七叠加 13 音 (b7+9+11+13)，得到丰润属色。",
+        "theory": "给属七叠加 13 音 (b7+9+11+13)，得到丰润属色。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；13 音=属音上方大六度。"
+      },
+      "practice_spec": {
+        "goal": "在属和弦上使用 13 音。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-V-I-vi",
+        "allowed_variables": [
+          "only_扩展"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Cmaj7",
+            "G7",
+            "Cmaj7",
+            "Am7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "G13",
+          "feeling_tag": "更厚",
+          "chord_sequence": [
+            "C",
+            "G13",
+            "C"
+          ],
+          "voicing_hint": [
+            "属加 13"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "G13 省略",
+          "feeling_tag": "更朦胧",
+          "chord_sequence": [
+            "C",
+            "G713",
+            "C"
+          ],
+          "voicing_hint": [
+            "只留 13"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Dm9-G13",
+          "feeling_tag": "更温暖",
+          "chord_sequence": [
+            "Dm9",
+            "G13",
+            "Cmaj9"
+          ],
+          "voicing_hint": [
+            "ii-V 加色"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "13 音落在弱拍，听感松弛。"
+      },
+      "hint": {
+        "short": "13 音=属音上方大六度。",
+        "deep_dive": "给属七叠加 13 音 (b7+9+11+13)，得到丰润属色。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "ink"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_015",
+      "source_type": "core",
+      "technique_name": "六和弦",
+      "category": {
+        "main": "extension",
+        "sub": "六和弦"
+      },
+      "difficulty": {
+        "score": 1,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：用 6 和弦替代大七，得到更「流行 / 巴萨诺瓦」的色彩。",
+        "theory": "用 6 和弦替代大七，得到更「流行 / 巴萨诺瓦」的色彩。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；6 音=根音上方大六度，替代大七度。"
+      },
+      "practice_spec": {
+        "goal": "把大七和弦改成 6 和弦。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-vi-IV-V",
+        "allowed_variables": [
+          "only_扩展"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "C6",
+          "feeling_tag": "更厚",
+          "chord_sequence": [
+            "C6",
+            "Am7",
+            "Fmaj7",
+            "G"
+          ],
+          "voicing_hint": [
+            "主换 6"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Fmaj7→F6",
+          "feeling_tag": "更朦胧",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "F6",
+            "G"
+          ],
+          "voicing_hint": [
+            "下属换 6"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Am6",
+          "feeling_tag": "更温暖",
+          "chord_sequence": [
+            "Am6",
+            "Dm",
+            "E"
+          ],
+          "voicing_hint": [
+            "六级加 6"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "6 和弦色彩统一不混杂。"
+      },
+      "hint": {
+        "short": "6 音=根音上方大六度，替代大七度。",
+        "deep_dive": "用 6 和弦替代大七，得到更「流行 / 巴萨诺瓦」的色彩。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "ink"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_016",
+      "source_type": "core",
+      "technique_name": "挂留和弦",
+      "category": {
+        "main": "extension",
+        "sub": "挂留和弦"
+      },
+      "difficulty": {
+        "score": 1,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：用 sus4 / sus2 制造悬而未决的张力，常落回三度。",
+        "theory": "用 sus4 / sus2 制造悬而未决的张力，常落回三度。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；sus4 = 把三度换成四度。"
+      },
+      "practice_spec": {
+        "goal": "在至少一处使用和弦挂留。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-IV-V",
+        "allowed_variables": [
+          "only_扩展"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Csus4",
+          "feeling_tag": "更厚",
+          "chord_sequence": [
+            "Csus4",
+            "C",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [
+            "主挂四"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Gsus4",
+          "feeling_tag": "更朦胧",
+          "chord_sequence": [
+            "C",
+            "F",
+            "Gsus4",
+            "G"
+          ],
+          "voicing_hint": [
+            "属挂四"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Dsus2",
+          "feeling_tag": "更温暖",
+          "chord_sequence": [
+            "Dsus2",
+            "Dm7",
+            "G"
+          ],
+          "voicing_hint": [
+            "ii 挂二"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "挂留到解决的三度有释放感。"
+      },
+      "hint": {
+        "short": "sus4 = 把三度换成四度。",
+        "deep_dive": "用 sus4 / sus2 制造悬而未决的张力，常落回三度。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "ink"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_017",
+      "source_type": "core",
+      "technique_name": "加音和弦",
+      "category": {
+        "main": "extension",
+        "sub": "加音和弦"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：在和弦上叠加 2、4 等「加音」，而非完整九和弦，色彩更空灵。",
+        "theory": "在和弦上叠加 2、4 等「加音」，而非完整九和弦，色彩更空灵。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；add 不带七音，结构是三和弦+色彩音。"
+      },
+      "practice_spec": {
+        "goal": "用 add 和弦改写一段。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-modal",
+        "allowed_variables": [
+          "only_扩展"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Cmaj7",
+            "Am7",
+            "Dm7",
+            "G7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Cadd9",
+          "feeling_tag": "更厚",
+          "chord_sequence": [
+            "Cadd9",
+            "Am7",
+            "Dm7",
+            "G7"
+          ],
+          "voicing_hint": [
+            "加 9"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Fadd9",
+          "feeling_tag": "更朦胧",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "Fadd9",
+            "G"
+          ],
+          "voicing_hint": [
+            "下属加 9"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Cadd4",
+          "feeling_tag": "更温暖",
+          "chord_sequence": [
+            "Cadd4",
+            "Am",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [
+            "加 4"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "加音清亮不浑浊。"
+      },
+      "hint": {
+        "short": "add 不带七音，结构是三和弦+色彩音。",
+        "deep_dive": "在和弦上叠加 2、4 等「加音」，而非完整九和弦，色彩更空灵。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "ink"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_018",
+      "source_type": "core",
+      "technique_name": "属七升十一 (Lydian Dominant)",
+      "category": {
+        "main": "extension",
+        "sub": "属七升十一 (Lydian Dominant)"
+      },
+      "difficulty": {
+        "score": 3,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：给属七加 #11，得到 lydian dominant 的悬浮色彩，常用于 bII7。",
+        "theory": "给属七加 #11，得到 lydian dominant 的悬浮色彩，常用于 bII7。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；#11 = 四度上方半音，堆叠四度可得。"
+      },
+      "practice_spec": {
+        "goal": "在属和弦上使用 #11。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-turnback",
+        "allowed_variables": [
+          "only_扩展"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "A7",
+            "D7",
+            "G7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "G7#11",
+          "feeling_tag": "更厚",
+          "chord_sequence": [
+            "C",
+            "A7#11",
+            "D7#11",
+            "G7#11"
+          ],
+          "voicing_hint": [
+            "属加 #11"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Db7#11",
+          "feeling_tag": "更朦胧",
+          "chord_sequence": [
+            "C",
+            "Db7#11",
+            "G"
+          ],
+          "voicing_hint": [
+            "bII 用 lydian dom"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "D7#11",
+          "feeling_tag": "更温暖",
+          "chord_sequence": [
+            "C",
+            "A7",
+            "D7#11",
+            "G"
+          ],
+          "voicing_hint": [
+            "副属加 #11"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "#11 不写成 b5 的刺耳感。"
+      },
+      "hint": {
+        "short": "#11 = 四度上方半音，堆叠四度可得。",
+        "deep_dive": "给属七加 #11，得到 lydian dominant 的悬浮色彩，常用于 bII7。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "ink"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_019",
+      "source_type": "core",
+      "technique_name": "十一和弦",
+      "category": {
+        "main": "extension",
+        "sub": "十一和弦"
+      },
+      "difficulty": {
+        "score": 3,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：小七叠 11 音 (如 Am11、Dm11)，得到通透的层叠色彩。",
+        "theory": "小七叠 11 音 (如 Am11、Dm11)，得到通透的层叠色彩。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；小七的 11 音=根音上方纯四度。"
+      },
+      "practice_spec": {
+        "goal": "使用 11 音的层叠写法。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-ii-V-I",
+        "allowed_variables": [
+          "only_扩展"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Dm7",
+            "G7",
+            "Cmaj7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Dm11",
+          "feeling_tag": "更厚",
+          "chord_sequence": [
+            "Dm11",
+            "G9",
+            "Cmaj9"
+          ],
+          "voicing_hint": [
+            "ii 加 11"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Am11",
+          "feeling_tag": "更朦胧",
+          "chord_sequence": [
+            "Am11",
+            "Dm11",
+            "E"
+          ],
+          "voicing_hint": [
+            "小和弦加 11"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Cmaj9#11",
+          "feeling_tag": "更温暖",
+          "chord_sequence": [
+            "Cmaj9#11",
+            "Am11",
+            "Dm11",
+            "G"
+          ],
+          "voicing_hint": [
+            "全加色"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "11 音与三度不构成刺耳小九。"
+      },
+      "hint": {
+        "short": "小七的 11 音=根音上方纯四度。",
+        "deep_dive": "小七叠 11 音 (如 Am11、Dm11)，得到通透的层叠色彩。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "ink"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_020",
+      "source_type": "core",
+      "technique_name": "高叠和弦",
+      "category": {
+        "main": "extension",
+        "sub": "高叠和弦"
+      },
+      "difficulty": {
+        "score": 4,
+        "band": "entry"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：在属/小七上叠加 9、11、13 全部，形成现代爵士高叠声部。",
+        "theory": "在属/小七上叠加 9、11、13 全部，形成现代爵士高叠声部。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；高叠需省略五音、避免小九冲突。"
+      },
+      "practice_spec": {
+        "goal": "写一段全部高叠的和声。",
+        "duration_min": 5,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-modal",
+        "allowed_variables": [
+          "only_扩展"
+        ],
+        "challenge_mode": "five_step_journey"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Cmaj7",
+            "Am7",
+            "Dm7",
+            "G7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "G13(9,11)",
+          "feeling_tag": "更厚",
+          "chord_sequence": [
+            "C",
+            "G13911",
+            "C"
+          ],
+          "voicing_hint": [
+            "属全高叠"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Dm13",
+          "feeling_tag": "更朦胧",
+          "chord_sequence": [
+            "Dm13",
+            "G13",
+            "Cmaj9"
+          ],
+          "voicing_hint": [
+            "ii-V 高叠"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Cmaj13",
+          "feeling_tag": "更温暖",
+          "chord_sequence": [
+            "Cmaj13",
+            "Am11",
+            "Dm13",
+            "G13"
+          ],
+          "voicing_hint": [
+            "全曲高叠"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "各声部不拥挤，听感现代。"
+      },
+      "hint": {
+        "short": "高叠需省略五音、避免小九冲突。",
+        "deep_dive": "在属/小七上叠加 9、11、13 全部，形成现代爵士高叠声部。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "ink"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_021",
+      "source_type": "core",
+      "technique_name": "色彩音叠加",
+      "category": {
+        "main": "extension",
+        "sub": "色彩音叠加"
+      },
+      "difficulty": {
+        "score": 3,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：在同一属七上交替尝试 b9/#9/#11/13，探索不同情感。",
+        "theory": "在同一属七上交替尝试 b9/#9/#11/13，探索不同情感。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；b9/#9 用于属；#11/13 用于悬浮属。"
+      },
+      "practice_spec": {
+        "goal": "对同一属和弦试 3 种色彩音。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-blues",
+        "allowed_variables": [
+          "only_扩展"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C7",
+            "F7",
+            "G7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "b9 紧张",
+          "feeling_tag": "更厚",
+          "chord_sequence": [
+            "C7b9",
+            "F7",
+            "G7"
+          ],
+          "voicing_hint": [
+            "属加 b9"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "#9 尖刺",
+          "feeling_tag": "更朦胧",
+          "chord_sequence": [
+            "C7#9",
+            "F7",
+            "G7"
+          ],
+          "voicing_hint": [
+            "属加 #9"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "#11+13 悬浮",
+          "feeling_tag": "更温暖",
+          "chord_sequence": [
+            "C7#1113",
+            "F7",
+            "G7"
+          ],
+          "voicing_hint": [
+            "属加 #11/13"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "三种色彩听感区分明显。"
+      },
+      "hint": {
+        "short": "b9/#9 用于属；#11/13 用于悬浮属。",
+        "deep_dive": "在同一属七上交替尝试 b9/#9/#11/13，探索不同情感。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "ink"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_022",
+      "source_type": "core",
+      "technique_name": "第一 / 第二转位",
+      "category": {
+        "main": "inversion",
+        "sub": "第一 / 第二转位"
+      },
+      "difficulty": {
+        "score": 1,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：用和弦转位安排低音线，使低音呈旋律化走向。",
+        "theory": "用和弦转位安排低音线，使低音呈旋律化走向。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；转位编号=低音音级 (1=原位,2=三音低,3=五音低)。"
+      },
+      "practice_spec": {
+        "goal": "给动机每个和弦指定一个转位。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-V-I-vi",
+        "allowed_variables": [
+          "only_转位"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Cmaj7",
+            "G7",
+            "Cmaj7",
+            "Am7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "C/G",
+          "feeling_tag": "更顺",
+          "chord_sequence": [
+            "C",
+            "G",
+            "G",
+            "C",
+            "E",
+            "Am"
+          ],
+          "voicing_hint": [
+            "主用 2 转位"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "G/B",
+          "feeling_tag": "更开阔",
+          "chord_sequence": [
+            "C",
+            "G",
+            "B",
+            "C",
+            "E",
+            "Am"
+          ],
+          "voicing_hint": [
+            "属用 1 转位"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Am/C",
+          "feeling_tag": "更流动",
+          "chord_sequence": [
+            "C",
+            "G",
+            "C",
+            "E",
+            "Am",
+            "C"
+          ],
+          "voicing_hint": [
+            "六级用 2 转位"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "低音线有方向感，不跳脱。"
+      },
+      "hint": {
+        "short": "转位编号=低音音级 (1=原位,2=三音低,3=五音低)。",
+        "deep_dive": "用和弦转位安排低音线，使低音呈旋律化走向。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "geometry"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_023",
+      "source_type": "core",
+      "technique_name": "共同音保持",
+      "category": {
+        "main": "inversion",
+        "sub": "共同音保持"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：相邻和弦保留一个共同音在同声部，使连接平滑。",
+        "theory": "相邻和弦保留一个共同音在同声部，使连接平滑。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；找相邻和弦的交集音。"
+      },
+      "practice_spec": {
+        "goal": "重写进行使每对和弦共享一个声部音。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-vi-ii-V",
+        "allowed_variables": [
+          "only_转位"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Cmaj7",
+            "Am7",
+            "Dm7",
+            "G7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "保留 CE",
+          "feeling_tag": "更顺",
+          "chord_sequence": [],
+          "voicing_hint": [
+            "保持 C/E"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "保留 AD",
+          "feeling_tag": "更开阔",
+          "chord_sequence": [],
+          "voicing_hint": [
+            "保持 D"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "保留 G",
+          "feeling_tag": "更流动",
+          "chord_sequence": [
+            "Am"
+          ],
+          "voicing_hint": [
+            "保持 G"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "声部多为级进或保持，无大跳。"
+      },
+      "hint": {
+        "short": "找相邻和弦的交集音。",
+        "deep_dive": "相邻和弦保留一个共同音在同声部，使连接平滑。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "geometry"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "needs_review"
+    },
+    {
+      "id": "relop_024",
+      "source_type": "core",
+      "technique_name": "平滑声部引导",
+      "category": {
+        "main": "inversion",
+        "sub": "平滑声部引导"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：每个声部尽量级进 (≤2 度)，形成巴洛克式引导。",
+        "theory": "每个声部尽量级进 (≤2 度)，形成巴洛克式引导。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；先定旋律线，再填内声部。"
+      },
+      "practice_spec": {
+        "goal": "写出一条全部级进的旋律声部。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-ii-V-I",
+        "allowed_variables": [
+          "only_转位"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Dm7",
+            "G7",
+            "Cmaj7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Soprano 下行",
+          "feeling_tag": "更顺",
+          "chord_sequence": [],
+          "voicing_hint": [
+            "旋律线下行"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Alto 级进",
+          "feeling_tag": "更开阔",
+          "chord_sequence": [],
+          "voicing_hint": [
+            "中音级进"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Bass 五度",
+          "feeling_tag": "更流动",
+          "chord_sequence": [],
+          "voicing_hint": [
+            "低音五度圈"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "声部无并行五八度硬伤。"
+      },
+      "hint": {
+        "short": "先定旋律线，再填内声部。",
+        "deep_dive": "每个声部尽量级进 (≤2 度)，形成巴洛克式引导。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "geometry"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "needs_review"
+    },
+    {
+      "id": "relop_025",
+      "source_type": "core",
+      "technique_name": "Drop-2 / Drop-3 排列",
+      "category": {
+        "main": "inversion",
+        "sub": "Drop-2 / Drop-3 排列"
+      },
+      "difficulty": {
+        "score": 3,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：把 closed voicing 的最高音下移八度 (drop2) 或次高音下移 (drop3)，得到开放排列。",
+        "theory": "把 closed voicing 的最高音下移八度 (drop2) 或次高音下移 (drop3)，得到开放排列。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；drop2 把第 2 个音(从上)降八度。"
+      },
+      "practice_spec": {
+        "goal": "用 drop2 重写一段四部声部。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-modal",
+        "allowed_variables": [
+          "only_转位"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Cmaj7",
+            "Am7",
+            "Dm7",
+            "G7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Drop2 Cmaj7",
+          "feeling_tag": "更顺",
+          "chord_sequence": [],
+          "voicing_hint": [
+            "根三五七→根五三七"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Drop3 Dm7",
+          "feeling_tag": "更开阔",
+          "chord_sequence": [],
+          "voicing_hint": [
+            "次高音下移"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Drop2 进行",
+          "feeling_tag": "更流动",
+          "chord_sequence": [],
+          "voicing_hint": [
+            "全曲开放排列"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "排列开阔，音区合理。"
+      },
+      "hint": {
+        "short": "drop2 把第 2 个音(从上)降八度。",
+        "deep_dive": "把 closed voicing 的最高音下移八度 (drop2) 或次高音下移 (drop3)，得到开放排列。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "geometry"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "needs_review"
+    },
+    {
+      "id": "relop_026",
+      "source_type": "core",
+      "technique_name": "低音线条转位",
+      "category": {
+        "main": "inversion",
+        "sub": "低音线条转位"
+      },
+      "difficulty": {
+        "score": 3,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：让低音形成独立旋律线 (如音阶式)，和弦随之转位配合。",
+        "theory": "让低音形成独立旋律线 (如音阶式)，和弦随之转位配合。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；低音线可脱离和弦根音。"
+      },
+      "practice_spec": {
+        "goal": "设计一条独立的低音旋律线。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-vi-IV-V",
+        "allowed_variables": [
+          "only_转位"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "C-B-A-G 低音",
+          "feeling_tag": "更顺",
+          "chord_sequence": [
+            "C",
+            "B",
+            "Am",
+            "F",
+            "A",
+            "G"
+          ],
+          "voicing_hint": [
+            "低音下行音阶"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "C-D-E-F",
+          "feeling_tag": "更开阔",
+          "chord_sequence": [
+            "C",
+            "Dm",
+            "C",
+            "Em",
+            "B",
+            "F"
+          ],
+          "voicing_hint": [
+            "低音上行"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "五度行走",
+          "feeling_tag": "更流动",
+          "chord_sequence": [
+            "C",
+            "G",
+            "Am",
+            "E"
+          ],
+          "voicing_hint": [
+            "低音跳五度"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "低音线有自身旋律逻辑。"
+      },
+      "hint": {
+        "short": "低音线可脱离和弦根音。",
+        "deep_dive": "让低音形成独立旋律线 (如音阶式)，和弦随之转位配合。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "geometry"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_027",
+      "source_type": "core",
+      "technique_name": "内声部转位",
+      "category": {
+        "main": "inversion",
+        "sub": "内声部转位"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：在内声部 (alto/tenor) 使用和弦转位，制造隐藏的旋律。",
+        "theory": "在内声部 (alto/tenor) 使用和弦转位，制造隐藏的旋律。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；内声部也遵守级进原则。"
+      },
+      "practice_spec": {
+        "goal": "让一个内声部唱出可辨识的线条。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-IV-V",
+        "allowed_variables": [
+          "only_转位"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Alto 旋律",
+          "feeling_tag": "更顺",
+          "chord_sequence": [
+            "C",
+            "C"
+          ],
+          "voicing_hint": [
+            "中音成线"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "Tenor 旋律",
+          "feeling_tag": "更开阔",
+          "chord_sequence": [],
+          "voicing_hint": [
+            "次中音线"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "双线",
+          "feeling_tag": "更流动",
+          "chord_sequence": [
+            "C",
+            "F",
+            "A",
+            "G",
+            "B",
+            "C"
+          ],
+          "voicing_hint": [
+            "两条内声部线"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "内声部线条流畅不突兀。"
+      },
+      "hint": {
+        "short": "内声部也遵守级进原则。",
+        "deep_dive": "在内声部 (alto/tenor) 使用和弦转位，制造隐藏的旋律。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "geometry"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "needs_review"
+    },
+    {
+      "id": "relop_028",
+      "source_type": "core",
+      "technique_name": "五度圈低音转位",
+      "category": {
+        "main": "inversion",
+        "sub": "五度圈低音转位"
+      },
+      "difficulty": {
+        "score": 3,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：以五度圈安排低音 (C-G-D-A-...)，和弦按圈转位。",
+        "theory": "以五度圈安排低音 (C-G-D-A-...)，和弦按圈转位。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；五度圈=最自然的低音走向。"
+      },
+      "practice_spec": {
+        "goal": "用五度圈组织一段低音。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-ii-V-I",
+        "allowed_variables": [
+          "only_转位"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Dm7",
+            "G7",
+            "Cmaj7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "下行五度",
+          "feeling_tag": "更顺",
+          "chord_sequence": [
+            "C",
+            "G",
+            "Dm",
+            "Am"
+          ],
+          "voicing_hint": [
+            "低音 C-G-D-A"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "上行五度",
+          "feeling_tag": "更开阔",
+          "chord_sequence": [
+            "C",
+            "F",
+            "Bb",
+            "Eb"
+          ],
+          "voicing_hint": [
+            "低音 C-F-Bb-Eb"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "混合",
+          "feeling_tag": "更流动",
+          "chord_sequence": [
+            "C",
+            "G",
+            "C",
+            "F"
+          ],
+          "voicing_hint": [
+            "半圈进行"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "低音循环稳定，和声连贯。"
+      },
+      "hint": {
+        "short": "五度圈=最自然的低音走向。",
+        "deep_dive": "以五度圈安排低音 (C-G-D-A-...)，和弦按圈转位。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "geometry"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_029",
+      "source_type": "core",
+      "technique_name": "三度叠置转位",
+      "category": {
+        "main": "inversion",
+        "sub": "三度叠置转位"
+      },
+      "difficulty": {
+        "score": 4,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：和弦以三度叠置但在开放音区间转位，制造「宽」的现代感。",
+        "theory": "和弦以三度叠置但在开放音区间转位，制造「宽」的现代感。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；宽广排列适合中低音区。"
+      },
+      "practice_spec": {
+        "goal": "写一段全部开放三度叠置的和声。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-modal",
+        "allowed_variables": [
+          "only_转位"
+        ],
+        "challenge_mode": "five_step_journey"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Cmaj7",
+            "Am7",
+            "Dm7",
+            "G7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "宽 Cmaj9",
+          "feeling_tag": "更顺",
+          "chord_sequence": [
+            "G",
+            "B",
+            "D"
+          ],
+          "voicing_hint": [
+            "开放三度"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "宽 Dm11",
+          "feeling_tag": "更开阔",
+          "chord_sequence": [
+            "A",
+            "C",
+            "E"
+          ],
+          "voicing_hint": [
+            "开放排列"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "宽连接",
+          "feeling_tag": "更流动",
+          "chord_sequence": [],
+          "voicing_hint": [
+            "全宽排列"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "音区间距合理，无撞音。"
+      },
+      "hint": {
+        "short": "宽广排列适合中低音区。",
+        "deep_dive": "和弦以三度叠置但在开放音区间转位，制造「宽」的现代感。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "geometry"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "needs_review"
+    },
+    {
+      "id": "relop_030",
+      "source_type": "core",
+      "technique_name": "主持续音",
+      "category": {
+        "main": "pedal",
+        "sub": "主持续音"
+      },
+      "difficulty": {
+        "score": 1,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：在最底声部持续奏主音，上方和弦自由变换。",
+        "theory": "在最底声部持续奏主音，上方和弦自由变换。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；持续音在和声变换时产生张力。"
+      },
+      "practice_spec": {
+        "goal": "为动机加一条主持续低音。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-vi-IV-V",
+        "allowed_variables": [
+          "only_持续低音"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "C pedal",
+          "feeling_tag": "更深",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "F",
+            "G",
+            "C"
+          ],
+          "voicing_hint": [
+            "低音恒为 C"
+          ],
+          "bass_pattern": "pedal",
+          "rhythm_variant": null
+        },
+        {
+          "label": "C 半持续",
+          "feeling_tag": "更悬",
+          "chord_sequence": [
+            "C2",
+            "C2"
+          ],
+          "voicing_hint": [
+            "间歇持续"
+          ],
+          "bass_pattern": "pedal",
+          "rhythm_variant": null
+        },
+        {
+          "label": "C 长音",
+          "feeling_tag": "更稳",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [
+            "长音持续"
+          ],
+          "bass_pattern": "pedal",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "上方和声变化，低音不乱。"
+      },
+      "hint": {
+        "short": "持续音在和声变换时产生张力。",
+        "deep_dive": "在最底声部持续奏主音，上方和弦自由变换。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "darkroom"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_031",
+      "source_type": "core",
+      "technique_name": "属持续音",
+      "category": {
+        "main": "pedal",
+        "sub": "属持续音"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：持续奏属音 (G)，上方在 I 与 V 间游离。",
+        "theory": "持续奏属音 (G)，上方在 I 与 V 间游离。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；属持续制造强烈期待感。"
+      },
+      "practice_spec": {
+        "goal": "用属持续重写一段。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-ii-V-I",
+        "allowed_variables": [
+          "only_持续低音"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Dm7",
+            "G7",
+            "Cmaj7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "G pedal",
+          "feeling_tag": "更深",
+          "chord_sequence": [
+            "G",
+            "C",
+            "Dm",
+            "G",
+            "G"
+          ],
+          "voicing_hint": [
+            "低音恒为 G"
+          ],
+          "bass_pattern": "pedal",
+          "rhythm_variant": null
+        },
+        {
+          "label": "G 上的 I",
+          "feeling_tag": "更悬",
+          "chord_sequence": [
+            "G",
+            "Cmaj7"
+          ],
+          "voicing_hint": [
+            "属持续上放主"
+          ],
+          "bass_pattern": "pedal",
+          "rhythm_variant": null
+        },
+        {
+          "label": "G 上的 iv",
+          "feeling_tag": "更稳",
+          "chord_sequence": [
+            "G",
+            "Dm",
+            "F"
+          ],
+          "voicing_hint": [
+            "属持续上放下属"
+          ],
+          "bass_pattern": "pedal",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "属持续到解决时释放充分。"
+      },
+      "hint": {
+        "short": "属持续制造强烈期待感。",
+        "deep_dive": "持续奏属音 (G)，上方在 I 与 V 间游离。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "darkroom"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_032",
+      "source_type": "core",
+      "technique_name": "双持续音",
+      "category": {
+        "main": "pedal",
+        "sub": "双持续音"
+      },
+      "difficulty": {
+        "score": 3,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：同时持续主音与属音 (C+G)，形成「空五度」底座。",
+        "theory": "同时持续主音与属音 (C+G)，形成「空五度」底座。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；双踏常用于史诗 / 悬疑氛围。"
+      },
+      "practice_spec": {
+        "goal": "构造一条双持续音底座。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-vi-IV-V",
+        "allowed_variables": [
+          "only_持续低音"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "C+G 双踏",
+          "feeling_tag": "更深",
+          "chord_sequence": [
+            "Am",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [
+            "低音两音持续"
+          ],
+          "bass_pattern": "pedal",
+          "rhythm_variant": null
+        },
+        {
+          "label": "C+G 上转",
+          "feeling_tag": "更悬",
+          "chord_sequence": [
+            "Dm7",
+            "G7"
+          ],
+          "voicing_hint": [
+            "上方变化和声"
+          ],
+          "bass_pattern": "pedal",
+          "rhythm_variant": null
+        },
+        {
+          "label": "交替双踏",
+          "feeling_tag": "更稳",
+          "chord_sequence": [
+            "C",
+            "G",
+            "C",
+            "G"
+          ],
+          "voicing_hint": [
+            "交替持续"
+          ],
+          "bass_pattern": "pedal",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "双踏与上方和声不冲突。"
+      },
+      "hint": {
+        "short": "双踏常用于史诗 / 悬疑氛围。",
+        "deep_dive": "同时持续主音与属音 (C+G)，形成「空五度」底座。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "darkroom"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_033",
+      "source_type": "core",
+      "technique_name": "半音游移持续",
+      "category": {
+        "main": "pedal",
+        "sub": "半音游移持续"
+      },
+      "difficulty": {
+        "score": 3,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：持续音在其上下半音游移，制造不安与张力。",
+        "theory": "持续音在其上下半音游移，制造不安与张力。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；游移只动低音，上方不变。"
+      },
+      "practice_spec": {
+        "goal": "让持续音做半音抖动。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "Am",
+        "motif_seed_id": "MOT-Am-i-iv-V",
+        "allowed_variables": [
+          "only_持续低音"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Am",
+            "Dm",
+            "E"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "C-#C-C",
+          "feeling_tag": "更深",
+          "chord_sequence": [
+            "C",
+            "C",
+            "Am"
+          ],
+          "voicing_hint": [
+            "主音上半音游移"
+          ],
+          "bass_pattern": "pedal",
+          "rhythm_variant": null
+        },
+        {
+          "label": "G-Ab-G",
+          "feeling_tag": "更悬",
+          "chord_sequence": [
+            "G",
+            "Ab",
+            "G",
+            "C"
+          ],
+          "voicing_hint": [
+            "属音下游移"
+          ],
+          "bass_pattern": "pedal",
+          "rhythm_variant": null
+        },
+        {
+          "label": "A-Bb-A",
+          "feeling_tag": "更稳",
+          "chord_sequence": [
+            "A",
+            "Bb",
+            "A",
+            "Am"
+          ],
+          "voicing_hint": [
+            "小调主游移"
+          ],
+          "bass_pattern": "pedal",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "半音游移听得见且不脏。"
+      },
+      "hint": {
+        "short": "游移只动低音，上方不变。",
+        "deep_dive": "持续音在其上下半音游移，制造不安与张力。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "darkroom"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_034",
+      "source_type": "core",
+      "technique_name": "静止低音",
+      "category": {
+        "main": "pedal",
+        "sub": "静止低音"
+      },
+      "difficulty": {
+        "score": 1,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：长时间重复同一低音，强调律动而非和声进行。",
+        "theory": "长时间重复同一低音，强调律动而非和声进行。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；静止低音突出节奏型。"
+      },
+      "practice_spec": {
+        "goal": "用静止低音写一段。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-blues",
+        "allowed_variables": [
+          "only_持续低音"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C7",
+            "F7",
+            "G7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "C 长踏",
+          "feeling_tag": "更深",
+          "chord_sequence": [
+            "C",
+            "C",
+            "C",
+            "C",
+            "C7",
+            "F7",
+            "G7"
+          ],
+          "voicing_hint": [
+            "低音固定"
+          ],
+          "bass_pattern": "pedal",
+          "rhythm_variant": null
+        },
+        {
+          "label": "A 长踏",
+          "feeling_tag": "更悬",
+          "chord_sequence": [
+            "A",
+            "A",
+            "A",
+            "A",
+            "Am",
+            "Dm",
+            "E"
+          ],
+          "voicing_hint": [
+            "小调长踏"
+          ],
+          "bass_pattern": "pedal",
+          "rhythm_variant": null
+        },
+        {
+          "label": "E 长踏",
+          "feeling_tag": "更稳",
+          "chord_sequence": [
+            "E",
+            "E",
+            "E",
+            "E"
+          ],
+          "voicing_hint": [
+            "属长踏"
+          ],
+          "bass_pattern": "pedal",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "律动清晰，低音不腻。"
+      },
+      "hint": {
+        "short": "静止低音突出节奏型。",
+        "deep_dive": "长时间重复同一低音，强调律动而非和声进行。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "darkroom"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_035",
+      "source_type": "core",
+      "technique_name": "混合利底亚持续",
+      "category": {
+        "main": "pedal",
+        "sub": "混合利底亚持续"
+      },
+      "difficulty": {
+        "score": 3,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：在属持续上叠加 mixolydian 色彩 (b7)，模糊大小调。",
+        "theory": "在属持续上叠加 mixolydian 色彩 (b7)，模糊大小调。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；mixolydian=大调降七。"
+      },
+      "practice_spec": {
+        "goal": "用 mixolydian 持续制造调性模糊。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-IV-V",
+        "allowed_variables": [
+          "only_持续低音"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "G mixo",
+          "feeling_tag": "更深",
+          "chord_sequence": [
+            "G",
+            "Cadd9",
+            "Dm7"
+          ],
+          "voicing_hint": [
+            "G 上放 mixo 和弦"
+          ],
+          "bass_pattern": "pedal",
+          "rhythm_variant": null
+        },
+        {
+          "label": "C/G b7",
+          "feeling_tag": "更悬",
+          "chord_sequence": [
+            "C",
+            "G",
+            "F",
+            "G",
+            "G"
+          ],
+          "voicing_hint": [
+            "G 持续带 b7"
+          ],
+          "bass_pattern": "pedal",
+          "rhythm_variant": null
+        },
+        {
+          "label": "双调",
+          "feeling_tag": "更稳",
+          "chord_sequence": [
+            "G",
+            "Cmaj7",
+            "Am7"
+          ],
+          "voicing_hint": [
+            "上下不同调"
+          ],
+          "bass_pattern": "pedal",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "调性模糊但可控。"
+      },
+      "hint": {
+        "short": "mixolydian=大调降七。",
+        "deep_dive": "在属持续上叠加 mixolydian 色彩 (b7)，模糊大小调。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "darkroom"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_036",
+      "source_type": "core",
+      "technique_name": "切分重配",
+      "category": {
+        "main": "rhythm",
+        "sub": "切分重配"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：把和弦更换点从强拍移到弱拍 / 反拍，制造摇摆。",
+        "theory": "把和弦更换点从强拍移到弱拍 / 反拍，制造摇摆。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；和弦的「重音」即更换点。"
+      },
+      "practice_spec": {
+        "goal": "改写节奏使换和弦落在反拍。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-V-I-vi",
+        "allowed_variables": [
+          "only_节奏"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Cmaj7",
+            "G7",
+            "Cmaj7",
+            "Am7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "反拍换和弦",
+          "feeling_tag": "更摇",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [
+            "换和弦在弱拍"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        },
+        {
+          "label": "后半拍",
+          "feeling_tag": "更跳",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "F"
+          ],
+          "voicing_hint": [
+            "后拍进入"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        },
+        {
+          "label": "延迟一拍",
+          "feeling_tag": "更留白",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "G"
+          ],
+          "voicing_hint": [
+            "整体延后"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "切分听感明显有律动。"
+      },
+      "hint": {
+        "short": "和弦的「重音」即更换点。",
+        "deep_dive": "把和弦更换点从强拍移到弱拍 / 反拍，制造摇摆。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "abstract"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_037",
+      "source_type": "core",
+      "technique_name": "三连音重配",
+      "category": {
+        "main": "rhythm",
+        "sub": "三连音重配"
+      },
+      "difficulty": {
+        "score": 3,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：用三连音或 3-against-2 节奏重组和弦更替。",
+        "theory": "用三连音或 3-against-2 节奏重组和弦更替。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；三连音让和声「滚动」起来。"
+      },
+      "practice_spec": {
+        "goal": "用三连音感重写节奏。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-ii-V-I",
+        "allowed_variables": [
+          "only_节奏"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Dm7",
+            "G7",
+            "Cmaj7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "3连音换和弦",
+          "feeling_tag": "更摇",
+          "chord_sequence": [
+            "Dm73",
+            "G73",
+            "C"
+          ],
+          "voicing_hint": [
+            "三连推进"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        },
+        {
+          "label": "3对2",
+          "feeling_tag": "更跳",
+          "chord_sequence": [],
+          "voicing_hint": [
+            "复合节拍"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        },
+        {
+          "label": "swing 八分",
+          "feeling_tag": "更留白",
+          "chord_sequence": [
+            "C"
+          ],
+          "voicing_hint": [
+            "摇摆八分"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "三连律动稳定不慌。"
+      },
+      "hint": {
+        "short": "三连音让和声「滚动」起来。",
+        "deep_dive": "用三连音或 3-against-2 节奏重组和弦更替。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "abstract"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "needs_review"
+    },
+    {
+      "id": "relop_038",
+      "source_type": "core",
+      "technique_name": "延迟解决",
+      "category": {
+        "main": "rhythm",
+        "sub": "延迟解决"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：把预期的和弦解决延后一拍 / 一小节，制造悬念。",
+        "theory": "把预期的和弦解决延后一拍 / 一小节，制造悬念。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；延迟=保留张力更久。"
+      },
+      "practice_spec": {
+        "goal": "让至少一处解决延后。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-vi-IV-V",
+        "allowed_variables": [
+          "only_节奏"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "延后 V",
+          "feeling_tag": "更摇",
+          "chord_sequence": [
+            "C",
+            "G"
+          ],
+          "voicing_hint": [
+            "属延后"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        },
+        {
+          "label": "延后 I",
+          "feeling_tag": "更跳",
+          "chord_sequence": [
+            "Am",
+            "C"
+          ],
+          "voicing_hint": [
+            "主延后"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        },
+        {
+          "label": "延后半拍",
+          "feeling_tag": "更留白",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "C"
+          ],
+          "voicing_hint": [
+            "半拍延后"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "延后解决有「终于落地」感。"
+      },
+      "hint": {
+        "short": "延迟=保留张力更久。",
+        "deep_dive": "把预期的和弦解决延后一拍 / 一小节，制造悬念。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "abstract"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_039",
+      "source_type": "core",
+      "technique_name": "先现和弦",
+      "category": {
+        "main": "rhythm",
+        "sub": "先现和弦"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：在下个和弦前一拍先弹出它的片段 (anticipation)。",
+        "theory": "在下个和弦前一拍先弹出它的片段 (anticipation)。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；先现=下一和弦的提前预告。"
+      },
+      "practice_spec": {
+        "goal": "加入至少一处先现和弦。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-IV-V",
+        "allowed_variables": [
+          "only_节奏"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "先现 G",
+          "feeling_tag": "更摇",
+          "chord_sequence": [
+            "C",
+            "G",
+            "G"
+          ],
+          "voicing_hint": [
+            "G 提前一拍"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        },
+        {
+          "label": "先现 F",
+          "feeling_tag": "更跳",
+          "chord_sequence": [
+            "C",
+            "F",
+            "F"
+          ],
+          "voicing_hint": [
+            "F 提前"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        },
+        {
+          "label": "先现 Am",
+          "feeling_tag": "更留白",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "Am"
+          ],
+          "voicing_hint": [
+            "Am 提前"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "先现短促，不抢拍。"
+      },
+      "hint": {
+        "short": "先现=下一和弦的提前预告。",
+        "deep_dive": "在下个和弦前一拍先弹出它的片段 (anticipation)。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "abstract"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_040",
+      "source_type": "core",
+      "technique_name": "留白",
+      "category": {
+        "main": "rhythm",
+        "sub": "留白"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：在和声进行中留出静默 (negative space)，让重配「呼吸」。",
+        "theory": "在和声进行中留出静默 (negative space)，让重配「呼吸」。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；留白比填满更有张力。"
+      },
+      "practice_spec": {
+        "goal": "在一段里安排一处静默。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "Am",
+        "motif_seed_id": "MOT-Am-i-iv-V",
+        "allowed_variables": [
+          "only_节奏"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Am",
+            "Dm",
+            "E"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "终止留白",
+          "feeling_tag": "更摇",
+          "chord_sequence": [
+            "Am",
+            "Dm",
+            "E"
+          ],
+          "voicing_hint": [
+            "句尾留空"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        },
+        {
+          "label": "对比留白",
+          "feeling_tag": "更跳",
+          "chord_sequence": [
+            "Am"
+          ],
+          "voicing_hint": [
+            "密后接空"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        },
+        {
+          "label": "半句空",
+          "feeling_tag": "更留白",
+          "chord_sequence": [
+            "Am",
+            "Dm",
+            "E"
+          ],
+          "voicing_hint": [
+            "中段留白"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "静默处自然，不显断裂。"
+      },
+      "hint": {
+        "short": "留白比填满更有张力。",
+        "deep_dive": "在和声进行中留出静默 (negative space)，让重配「呼吸」。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "abstract"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_041",
+      "source_type": "core",
+      "technique_name": "节拍错位",
+      "category": {
+        "main": "rhythm",
+        "sub": "节拍错位"
+      },
+      "difficulty": {
+        "score": 4,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：将 4 拍和声周期错开半拍 / 一拍半，制造 metric displacement。",
+        "theory": "将 4 拍和声周期错开半拍 / 一拍半，制造 metric displacement。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；错位让听者反复「重新对齐」。"
+      },
+      "practice_spec": {
+        "goal": "写一段节拍错位的和声。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-modal",
+        "allowed_variables": [
+          "only_节奏"
+        ],
+        "challenge_mode": "five_step_journey"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Cmaj7",
+            "Am7",
+            "Dm7",
+            "G7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "错半拍",
+          "feeling_tag": "更摇",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "Dm",
+            "G"
+          ],
+          "voicing_hint": [
+            "整体右移半拍"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        },
+        {
+          "label": "3拍周期",
+          "feeling_tag": "更跳",
+          "chord_sequence": [
+            "C3",
+            "Am3",
+            "Dm3",
+            "G"
+          ],
+          "voicing_hint": [
+            "非 4 拍周期"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        },
+        {
+          "label": "错一拍半",
+          "feeling_tag": "更留白",
+          "chord_sequence": [
+            "C",
+            "Am15",
+            "Dm",
+            "G"
+          ],
+          "voicing_hint": [
+            "大错位"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "错位有逻辑，可循环。"
+      },
+      "hint": {
+        "short": "错位让听者反复「重新对齐」。",
+        "deep_dive": "将 4 拍和声周期错开半拍 / 一拍半，制造 metric displacement。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "abstract"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_042",
+      "source_type": "core",
+      "technique_name": "律动切分",
+      "category": {
+        "main": "rhythm",
+        "sub": "律动切分"
+      },
+      "difficulty": {
+        "score": 3,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：用重复的短律动型 (ostinato) 承载变化的和声。",
+        "theory": "用重复的短律动型 (ostinato) 承载变化的和声。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；ostinato 让变化有锚点。"
+      },
+      "practice_spec": {
+        "goal": "设计一个重复律动型配合重配。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-blues",
+        "allowed_variables": [
+          "only_节奏"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C7",
+            "F7",
+            "G7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "八分 ostinato",
+          "feeling_tag": "更摇",
+          "chord_sequence": [
+            "C8",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [
+            "固定八分律动"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        },
+        {
+          "label": "切分 ostinato",
+          "feeling_tag": "更跳",
+          "chord_sequence": [
+            "C",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [
+            "固定切分律动"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        },
+        {
+          "label": "低音 ostinato",
+          "feeling_tag": "更留白",
+          "chord_sequence": [
+            "C"
+          ],
+          "voicing_hint": [
+            "低音固定上变"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": "syncopated"
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "律动型清晰可循环。"
+      },
+      "hint": {
+        "short": "ostinato 让变化有锚点。",
+        "deep_dive": "用重复的短律动型 (ostinato) 承载变化的和声。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "abstract"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_043",
+      "source_type": "core",
+      "technique_name": "动机模进",
+      "category": {
+        "main": "motif",
+        "sub": "动机模进"
+      },
+      "difficulty": {
+        "score": 1,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：把一小节动机在相邻音高 (常二度/三度) 上重复。",
+        "theory": "把一小节动机在相邻音高 (常二度/三度) 上重复。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；模进=同型不同高。"
+      },
+      "practice_spec": {
+        "goal": "对动机做≥3 次模进。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-ii-V-I",
+        "allowed_variables": [
+          "only_动机"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Dm7",
+            "G7",
+            "Cmaj7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "上行二度",
+          "feeling_tag": "更密",
+          "chord_sequence": [
+            "Dm",
+            "Em",
+            "F"
+          ],
+          "voicing_hint": [
+            "二度模进"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "下行三度",
+          "feeling_tag": "更对称",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "F"
+          ],
+          "voicing_hint": [
+            "三度模进"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "五度模进",
+          "feeling_tag": "更碎",
+          "chord_sequence": [
+            "C",
+            "G",
+            "D",
+            "A"
+          ],
+          "voicing_hint": [
+            "五度模进"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "模进线条清晰可辨。"
+      },
+      "hint": {
+        "short": "模进=同型不同高。",
+        "deep_dive": "把一小节动机在相邻音高 (常二度/三度) 上重复。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_044",
+      "source_type": "core",
+      "technique_name": "动机倒影",
+      "category": {
+        "main": "motif",
+        "sub": "动机倒影"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：把动机音程上下翻转 (上行变下行)。",
+        "theory": "把动机音程上下翻转 (上行变下行)。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；倒影像水中倒影。"
+      },
+      "practice_spec": {
+        "goal": "写一段动机及其倒影。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-vi-IV-V",
+        "allowed_variables": [
+          "only_动机"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "严格倒影",
+          "feeling_tag": "更密",
+          "chord_sequence": [
+            "C3",
+            "Am3"
+          ],
+          "voicing_hint": [
+            "镜像"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "自由倒影",
+          "feeling_tag": "更对称",
+          "chord_sequence": [
+            "C",
+            "F"
+          ],
+          "voicing_hint": [
+            "局部镜像"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "中心倒影",
+          "feeling_tag": "更碎",
+          "chord_sequence": [
+            "G"
+          ],
+          "voicing_hint": [
+            "以某音为轴"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "倒影与原动机对称可闻。"
+      },
+      "hint": {
+        "short": "倒影像水中倒影。",
+        "deep_dive": "把动机音程上下翻转 (上行变下行)。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_045",
+      "source_type": "core",
+      "technique_name": "动机逆行",
+      "category": {
+        "main": "motif",
+        "sub": "动机逆行"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：把动机音序倒过来演奏 (retrograde)。",
+        "theory": "把动机音序倒过来演奏 (retrograde)。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；逆行=从尾读到头。"
+      },
+      "practice_spec": {
+        "goal": "写一段动机及其逆行。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "Am",
+        "motif_seed_id": "MOT-Am-i-iv-V",
+        "allowed_variables": [
+          "only_动机"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Am",
+            "Dm",
+            "E"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "完全逆行",
+          "feeling_tag": "更密",
+          "chord_sequence": [
+            "Am",
+            "Am"
+          ],
+          "voicing_hint": [
+            "整段倒放"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "半句逆行",
+          "feeling_tag": "更对称",
+          "chord_sequence": [
+            "Am"
+          ],
+          "voicing_hint": [
+            "半句倒放"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "卡农逆行",
+          "feeling_tag": "更碎",
+          "chord_sequence": [
+            "Am",
+            "Am"
+          ],
+          "voicing_hint": [
+            "顺逆对位"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "逆行线条连贯不怪异。"
+      },
+      "hint": {
+        "short": "逆行=从尾读到头。",
+        "deep_dive": "把动机音序倒过来演奏 (retrograde)。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_046",
+      "source_type": "core",
+      "technique_name": "核心音贯穿",
+      "category": {
+        "main": "motif",
+        "sub": "核心音贯穿"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：让一个核心音 (常主/属) 在多个和弦中持续出现。",
+        "theory": "让一个核心音 (常主/属) 在多个和弦中持续出现。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；贯穿音=动机的「锚」。"
+      },
+      "practice_spec": {
+        "goal": "让一个音贯穿整段。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-vi-ii-V",
+        "allowed_variables": [
+          "only_动机"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Cmaj7",
+            "Am7",
+            "Dm7",
+            "G7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "C 贯穿",
+          "feeling_tag": "更密",
+          "chord_sequence": [],
+          "voicing_hint": [
+            "主音贯穿"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "G 贯穿",
+          "feeling_tag": "更对称",
+          "chord_sequence": [],
+          "voicing_hint": [
+            "属音贯穿"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "E 贯穿",
+          "feeling_tag": "更碎",
+          "chord_sequence": [],
+          "voicing_hint": [
+            "三音贯穿"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "核心音统一全曲可感知。"
+      },
+      "hint": {
+        "short": "贯穿音=动机的「锚」。",
+        "deep_dive": "让一个核心音 (常主/属) 在多个和弦中持续出现。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "needs_review"
+    },
+    {
+      "id": "relop_047",
+      "source_type": "core",
+      "technique_name": "节奏动机统一",
+      "category": {
+        "main": "motif",
+        "sub": "节奏动机统一"
+      },
+      "difficulty": {
+        "score": 1,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：保持同一节奏型，仅换音高 / 和声。",
+        "theory": "保持同一节奏型，仅换音高 / 和声。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；节奏比音高更易成「动机」。"
+      },
+      "practice_spec": {
+        "goal": "用同一节奏型写全段。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-IV-V",
+        "allowed_variables": [
+          "only_动机"
+        ],
+        "challenge_mode": "fixed_experiment"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "同节奏换和弦",
+          "feeling_tag": "更密",
+          "chord_sequence": [],
+          "voicing_hint": [
+            "节奏锁定"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "同节奏换音",
+          "feeling_tag": "更对称",
+          "chord_sequence": [],
+          "voicing_hint": [
+            "同型移调"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "节奏 motif",
+          "feeling_tag": "更碎",
+          "chord_sequence": [],
+          "voicing_hint": [
+            "固定节奏词"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "节奏统一感强。"
+      },
+      "hint": {
+        "short": "节奏比音高更易成「动机」。",
+        "deep_dive": "保持同一节奏型，仅换音高 / 和声。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "needs_review"
+    },
+    {
+      "id": "relop_048",
+      "source_type": "core",
+      "technique_name": "音程动机",
+      "category": {
+        "main": "motif",
+        "sub": "音程动机"
+      },
+      "difficulty": {
+        "score": 2,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：以一个特征音程 (如小三度、增四度) 组织全曲。",
+        "theory": "以一个特征音程 (如小三度、增四度) 组织全曲。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；特征音程=动机的「指纹」。"
+      },
+      "practice_spec": {
+        "goal": "选一个特征音程贯穿。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-modal",
+        "allowed_variables": [
+          "only_动机"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Cmaj7",
+            "Am7",
+            "Dm7",
+            "G7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "小三度动机",
+          "feeling_tag": "更密",
+          "chord_sequence": [
+            "C",
+            "Eb",
+            "F",
+            "Ab"
+          ],
+          "voicing_hint": [
+            "小三度贯穿"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "增四度动机",
+          "feeling_tag": "更对称",
+          "chord_sequence": [
+            "C",
+            "F#",
+            "G",
+            "C#"
+          ],
+          "voicing_hint": [
+            "三全音动机"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "大六度动机",
+          "feeling_tag": "更碎",
+          "chord_sequence": [
+            "C",
+            "A",
+            "D",
+            "B"
+          ],
+          "voicing_hint": [
+            "大六动机"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "音程指纹可辨识。"
+      },
+      "hint": {
+        "short": "特征音程=动机的「指纹」。",
+        "deep_dive": "以一个特征音程 (如小三度、增四度) 组织全曲。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    },
+    {
+      "id": "relop_049",
+      "source_type": "core",
+      "technique_name": "对位动机",
+      "category": {
+        "main": "motif",
+        "sub": "对位动机"
+      },
+      "difficulty": {
+        "score": 3,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：写两条互为对位的动机线 (如一快一慢)。",
+        "theory": "写两条互为对位的动机线 (如一快一慢)。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；对位=独立线条的对话。"
+      },
+      "practice_spec": {
+        "goal": "写两条对位动机。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "Am",
+        "motif_seed_id": "MOT-Am-modal",
+        "allowed_variables": [
+          "only_动机"
+        ],
+        "challenge_mode": "free_variant"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "Am7",
+            "Dm7",
+            "E7",
+            "Am7"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "长短对位",
+          "feeling_tag": "更密",
+          "chord_sequence": [
+            "Am",
+            "Dm",
+            "E"
+          ],
+          "voicing_hint": [
+            "疏密对位"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "反向对位",
+          "feeling_tag": "更对称",
+          "chord_sequence": [],
+          "voicing_hint": [
+            "反向运动"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "模仿对位",
+          "feeling_tag": "更碎",
+          "chord_sequence": [
+            "A",
+            "A"
+          ],
+          "voicing_hint": [
+            "卡农式"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "两条线各自成立又呼应。"
+      },
+      "hint": {
+        "short": "对位=独立线条的对话。",
+        "deep_dive": "写两条互为对位的动机线 (如一快一慢)。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "needs_review"
+    },
+    {
+      "id": "relop_050",
+      "source_type": "core",
+      "technique_name": "动机碎片化",
+      "category": {
+        "main": "motif",
+        "sub": "动机碎片化"
+      },
+      "difficulty": {
+        "score": 3,
+        "band": "bridge"
+      },
+      "prerequisites": [],
+      "core_theory": {
+        "plain_white": "先听再懂：把动机切碎、重组、留白，形成发展的「解体」感。",
+        "theory": "把动机切碎、重组、留白，形成发展的「解体」感。",
+        "jazz_note": "",
+        "common_pitfall": "避免平行五八度与无解决属和弦；碎片化=动机的「解构」。"
+      },
+      "practice_spec": {
+        "goal": "把动机碎片化重组。",
+        "duration_min": 8,
+        "loop_bars": 4,
+        "default_key": "C",
+        "motif_seed_id": "MOT-C-I-vi-IV-V",
+        "allowed_variables": [
+          "only_动机"
+        ],
+        "challenge_mode": "five_step_journey"
+      },
+      "candidate_reharmonization_set": [
+        {
+          "label": "原始基准版",
+          "feeling_tag": "原味稳定",
+          "chord_sequence": [
+            "C",
+            "Am",
+            "F",
+            "G"
+          ],
+          "voicing_hint": [],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "切片",
+          "feeling_tag": "更密",
+          "chord_sequence": [
+            "C",
+            "F"
+          ],
+          "voicing_hint": [
+            "取头尾"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "重组",
+          "feeling_tag": "更对称",
+          "chord_sequence": [
+            "Am",
+            "C",
+            "F"
+          ],
+          "voicing_hint": [
+            "打乱顺序"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        },
+        {
+          "label": "渐碎",
+          "feeling_tag": "更碎",
+          "chord_sequence": [
+            "C",
+            "C",
+            "C"
+          ],
+          "voicing_hint": [
+            "逐步碎化"
+          ],
+          "bass_pattern": "root",
+          "rhythm_variant": null
+        }
+      ],
+      "success_condition": {
+        "type": "compare_two",
+        "check_rule": "碎片仍可追溯原动机。"
+      },
+      "hint": {
+        "short": "碎片化=动机的「解构」。",
+        "deep_dive": "把动机切碎、重组、留白，形成发展的「解体」感。"
+      },
+      "media": {
+        "visual_style_suggest": [
+          "sketch"
+        ],
+        "default_tone_preset": "jazz_piano_light"
+      },
+      "qa_status": "passed"
+    }
+  ]
+}</script>
+<script id="data-motifs" type="application/json">{
+  "version": "1.0.0",
+  "note": "midi_events 为可选示范旋律；chord 进行见各任务 candidate_reharmonization_set。",
+  "motifs": [
+    {
+      "id": "MOT-C-I-V-I-vi",
+      "name": "正格终止式",
+      "difficulty": 1,
+      "default_key": "C",
+      "bars": 4,
+      "midi_events": [
+        {
+          "midi": 60,
+          "startBeat": 0,
+          "durBeats": 1
+        },
+        {
+          "midi": 64,
+          "startBeat": 1,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 2,
+          "durBeats": 1
+        },
+        {
+          "midi": 65,
+          "startBeat": 3,
+          "durBeats": 1
+        },
+        {
+          "midi": 64,
+          "startBeat": 4,
+          "durBeats": 1
+        },
+        {
+          "midi": 62,
+          "startBeat": 5,
+          "durBeats": 1
+        },
+        {
+          "midi": 60,
+          "startBeat": 6,
+          "durBeats": 1
+        },
+        {
+          "midi": 64,
+          "startBeat": 7,
+          "durBeats": 1
+        }
+      ],
+      "rhythm_profile": "even",
+      "suitable_technique_categories": [],
+      "description": "一段简单旋律种子（C），用于当日技法练习。"
+    },
+    {
+      "id": "MOT-C-ii-V-I",
+      "name": "ii-V-I",
+      "difficulty": 1,
+      "default_key": "C",
+      "bars": 3,
+      "midi_events": [
+        {
+          "midi": 62,
+          "startBeat": 0,
+          "durBeats": 1
+        },
+        {
+          "midi": 65,
+          "startBeat": 1,
+          "durBeats": 1
+        },
+        {
+          "midi": 69,
+          "startBeat": 2,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 3,
+          "durBeats": 1
+        },
+        {
+          "midi": 71,
+          "startBeat": 4,
+          "durBeats": 1
+        },
+        {
+          "midi": 72,
+          "startBeat": 5,
+          "durBeats": 1
+        }
+      ],
+      "rhythm_profile": "even",
+      "suitable_technique_categories": [],
+      "description": "一段简单旋律种子（C），用于当日技法练习。"
+    },
+    {
+      "id": "MOT-C-I-vi-ii-V",
+      "name": "循环进行",
+      "difficulty": 1,
+      "default_key": "C",
+      "bars": 4,
+      "midi_events": [
+        {
+          "midi": 60,
+          "startBeat": 0,
+          "durBeats": 1
+        },
+        {
+          "midi": 64,
+          "startBeat": 1,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 2,
+          "durBeats": 1
+        },
+        {
+          "midi": 69,
+          "startBeat": 3,
+          "durBeats": 1
+        },
+        {
+          "midi": 62,
+          "startBeat": 4,
+          "durBeats": 1
+        },
+        {
+          "midi": 65,
+          "startBeat": 5,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 6,
+          "durBeats": 1
+        },
+        {
+          "midi": 71,
+          "startBeat": 7,
+          "durBeats": 1
+        }
+      ],
+      "rhythm_profile": "even",
+      "suitable_technique_categories": [],
+      "description": "一段简单旋律种子（C），用于当日技法练习。"
+    },
+    {
+      "id": "MOT-C-I-IV-V",
+      "name": "基础进行",
+      "difficulty": 1,
+      "default_key": "C",
+      "bars": 3,
+      "midi_events": [
+        {
+          "midi": 60,
+          "startBeat": 0,
+          "durBeats": 1
+        },
+        {
+          "midi": 64,
+          "startBeat": 1,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 2,
+          "durBeats": 1
+        },
+        {
+          "midi": 65,
+          "startBeat": 3,
+          "durBeats": 1
+        },
+        {
+          "midi": 69,
+          "startBeat": 4,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 5,
+          "durBeats": 1
+        }
+      ],
+      "rhythm_profile": "even",
+      "suitable_technique_categories": [],
+      "description": "一段简单旋律种子（C），用于当日技法练习。"
+    },
+    {
+      "id": "MOT-C-blues",
+      "name": "属七蓝调",
+      "difficulty": 1,
+      "default_key": "C",
+      "bars": 3,
+      "midi_events": [
+        {
+          "midi": 60,
+          "startBeat": 0,
+          "durBeats": 1
+        },
+        {
+          "midi": 63,
+          "startBeat": 1,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 2,
+          "durBeats": 1
+        },
+        {
+          "midi": 70,
+          "startBeat": 3,
+          "durBeats": 1
+        },
+        {
+          "midi": 65,
+          "startBeat": 4,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 5,
+          "durBeats": 1
+        }
+      ],
+      "rhythm_profile": "even",
+      "suitable_technique_categories": [],
+      "description": "一段简单旋律种子（C），用于当日技法练习。"
+    },
+    {
+      "id": "MOT-C-I-vi-IV-V",
+      "name": "五零年代",
+      "difficulty": 1,
+      "default_key": "C",
+      "bars": 4,
+      "midi_events": [
+        {
+          "midi": 60,
+          "startBeat": 0,
+          "durBeats": 1
+        },
+        {
+          "midi": 64,
+          "startBeat": 1,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 2,
+          "durBeats": 1
+        },
+        {
+          "midi": 69,
+          "startBeat": 3,
+          "durBeats": 1
+        },
+        {
+          "midi": 65,
+          "startBeat": 4,
+          "durBeats": 1
+        },
+        {
+          "midi": 60,
+          "startBeat": 5,
+          "durBeats": 1
+        },
+        {
+          "midi": 65,
+          "startBeat": 6,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 7,
+          "durBeats": 1
+        }
+      ],
+      "rhythm_profile": "even",
+      "suitable_technique_categories": [],
+      "description": "一段简单旋律种子（C），用于当日技法练习。"
+    },
+    {
+      "id": "MOT-C-modal",
+      "name": "调式循环",
+      "difficulty": 1,
+      "default_key": "C",
+      "bars": 4,
+      "midi_events": [
+        {
+          "midi": 60,
+          "startBeat": 0,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 1,
+          "durBeats": 1
+        },
+        {
+          "midi": 64,
+          "startBeat": 2,
+          "durBeats": 1
+        },
+        {
+          "midi": 62,
+          "startBeat": 3,
+          "durBeats": 1
+        },
+        {
+          "midi": 65,
+          "startBeat": 4,
+          "durBeats": 1
+        },
+        {
+          "midi": 69,
+          "startBeat": 5,
+          "durBeats": 1
+        },
+        {
+          "midi": 71,
+          "startBeat": 6,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 7,
+          "durBeats": 1
+        }
+      ],
+      "rhythm_profile": "even",
+      "suitable_technique_categories": [],
+      "description": "一段简单旋律种子（C），用于当日技法练习。"
+    },
+    {
+      "id": "MOT-C-turnback",
+      "name": "回转进行",
+      "difficulty": 1,
+      "default_key": "C",
+      "bars": 4,
+      "midi_events": [
+        {
+          "midi": 60,
+          "startBeat": 0,
+          "durBeats": 1
+        },
+        {
+          "midi": 64,
+          "startBeat": 1,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 2,
+          "durBeats": 1
+        },
+        {
+          "midi": 69,
+          "startBeat": 3,
+          "durBeats": 1
+        },
+        {
+          "midi": 65,
+          "startBeat": 4,
+          "durBeats": 1
+        },
+        {
+          "midi": 62,
+          "startBeat": 5,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 6,
+          "durBeats": 1
+        },
+        {
+          "midi": 71,
+          "startBeat": 7,
+          "durBeats": 1
+        }
+      ],
+      "rhythm_profile": "even",
+      "suitable_technique_categories": [],
+      "description": "一段简单旋律种子（C），用于当日技法练习。"
+    },
+    {
+      "id": "MOT-Am-i-iv-V",
+      "name": "小调正格",
+      "difficulty": 1,
+      "default_key": "Am",
+      "bars": 3,
+      "midi_events": [
+        {
+          "midi": 57,
+          "startBeat": 0,
+          "durBeats": 1
+        },
+        {
+          "midi": 60,
+          "startBeat": 1,
+          "durBeats": 1
+        },
+        {
+          "midi": 64,
+          "startBeat": 2,
+          "durBeats": 1
+        },
+        {
+          "midi": 62,
+          "startBeat": 3,
+          "durBeats": 1
+        },
+        {
+          "midi": 64,
+          "startBeat": 4,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 5,
+          "durBeats": 1
+        }
+      ],
+      "rhythm_profile": "even",
+      "suitable_technique_categories": [],
+      "description": "一段简单旋律种子（Am），用于当日技法练习。"
+    },
+    {
+      "id": "MOT-Am-i-VII-VI",
+      "name": "安达卢西亚",
+      "difficulty": 1,
+      "default_key": "Am",
+      "bars": 3,
+      "midi_events": [
+        {
+          "midi": 57,
+          "startBeat": 0,
+          "durBeats": 1
+        },
+        {
+          "midi": 60,
+          "startBeat": 1,
+          "durBeats": 1
+        },
+        {
+          "midi": 64,
+          "startBeat": 2,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 3,
+          "durBeats": 1
+        },
+        {
+          "midi": 65,
+          "startBeat": 4,
+          "durBeats": 1
+        },
+        {
+          "midi": 60,
+          "startBeat": 5,
+          "durBeats": 1
+        }
+      ],
+      "rhythm_profile": "even",
+      "suitable_technique_categories": [],
+      "description": "一段简单旋律种子（Am），用于当日技法练习。"
+    },
+    {
+      "id": "MOT-Am-i-bVI-bVII",
+      "name": "小调借用",
+      "difficulty": 1,
+      "default_key": "Am",
+      "bars": 3,
+      "midi_events": [
+        {
+          "midi": 57,
+          "startBeat": 0,
+          "durBeats": 1
+        },
+        {
+          "midi": 60,
+          "startBeat": 1,
+          "durBeats": 1
+        },
+        {
+          "midi": 64,
+          "startBeat": 2,
+          "durBeats": 1
+        },
+        {
+          "midi": 65,
+          "startBeat": 3,
+          "durBeats": 1
+        },
+        {
+          "midi": 62,
+          "startBeat": 4,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 5,
+          "durBeats": 1
+        }
+      ],
+      "rhythm_profile": "even",
+      "suitable_technique_categories": [],
+      "description": "一段简单旋律种子（Am），用于当日技法练习。"
+    },
+    {
+      "id": "MOT-Am-i-VII-VI-VII",
+      "name": "游走低音",
+      "difficulty": 1,
+      "default_key": "Am",
+      "bars": 4,
+      "midi_events": [
+        {
+          "midi": 57,
+          "startBeat": 0,
+          "durBeats": 1
+        },
+        {
+          "midi": 60,
+          "startBeat": 1,
+          "durBeats": 1
+        },
+        {
+          "midi": 64,
+          "startBeat": 2,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 3,
+          "durBeats": 1
+        },
+        {
+          "midi": 65,
+          "startBeat": 4,
+          "durBeats": 1
+        },
+        {
+          "midi": 64,
+          "startBeat": 5,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 6,
+          "durBeats": 1
+        },
+        {
+          "midi": 60,
+          "startBeat": 7,
+          "durBeats": 1
+        }
+      ],
+      "rhythm_profile": "even",
+      "suitable_technique_categories": [],
+      "description": "一段简单旋律种子（Am），用于当日技法练习。"
+    },
+    {
+      "id": "MOT-Am-modal",
+      "name": "小调调式",
+      "difficulty": 1,
+      "default_key": "Am",
+      "bars": 4,
+      "midi_events": [
+        {
+          "midi": 57,
+          "startBeat": 0,
+          "durBeats": 1
+        },
+        {
+          "midi": 64,
+          "startBeat": 1,
+          "durBeats": 1
+        },
+        {
+          "midi": 60,
+          "startBeat": 2,
+          "durBeats": 1
+        },
+        {
+          "midi": 62,
+          "startBeat": 3,
+          "durBeats": 1
+        },
+        {
+          "midi": 65,
+          "startBeat": 4,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 5,
+          "durBeats": 1
+        },
+        {
+          "midi": 64,
+          "startBeat": 6,
+          "durBeats": 1
+        },
+        {
+          "midi": 57,
+          "startBeat": 7,
+          "durBeats": 1
+        }
+      ],
+      "rhythm_profile": "even",
+      "suitable_technique_categories": [],
+      "description": "一段简单旋律种子（Am），用于当日技法练习。"
+    },
+    {
+      "id": "MOT-Am-minorblues",
+      "name": "小调蓝调",
+      "difficulty": 1,
+      "default_key": "Am",
+      "bars": 3,
+      "midi_events": [
+        {
+          "midi": 57,
+          "startBeat": 0,
+          "durBeats": 1
+        },
+        {
+          "midi": 60,
+          "startBeat": 1,
+          "durBeats": 1
+        },
+        {
+          "midi": 64,
+          "startBeat": 2,
+          "durBeats": 1
+        },
+        {
+          "midi": 62,
+          "startBeat": 3,
+          "durBeats": 1
+        },
+        {
+          "midi": 65,
+          "startBeat": 4,
+          "durBeats": 1
+        },
+        {
+          "midi": 67,
+          "startBeat": 5,
+          "durBeats": 1
+        }
+      ],
+      "rhythm_profile": "even",
+      "suitable_technique_categories": [],
+      "description": "一段简单旋律种子（Am），用于当日技法练习。"
+    }
+  ]
+}</script>
+<script>
+var TP=JSON.parse(document.getElementById('data-task_pool').textContent);
+var MOT=JSON.parse(document.getElementById('data-motifs').textContent);
+
+/* ---------- valid jazz vocabulary (guard the bottom line) ---------- */
+var PROGS=[];
+TP.tasks.forEach(function(t){
+  t.candidate_reharmonization_set.forEach(function(c){
+    if(c.chord_sequence && c.chord_sequence.length>=2) PROGS.push(c.chord_sequence);
+  });
+});
+var TECHS=TP.tasks.map(function(t){return t.technique_name;});
+var ROOTS={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
+var RN=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+function parseChord(s){
+  if(!s) return null;
+  var m=s.match(/^([A-G])(#|b)?(.*)$/); if(!m) return null;
+  var root=ROOTS[m[1]]+(m[2]==='#'?1:(m[2]==='b'?-1:0));
+  var q=m[3]||'', iv;
+  if(/dim/.test(q)) iv=[0,3,6,9];
+  else if(/m(?!aj)/.test(q)){ if(/maj7/.test(q)) iv=[0,3,7,11]; else if(/7/.test(q)) iv=[0,3,7,10]; else iv=[0,3,7]; }
+  else { if(/maj7/.test(q)) iv=[0,4,7,11]; else if(/7/.test(q)) iv=[0,4,7,10]; else if(/6/.test(q)) iv=[0,4,7,9]; else iv=[0,4,7]; }
+  if(/sus/.test(q)) iv=[0,5,7];
+  if(/alt/.test(q)) iv=[0,4,7,10,13,15,21];
+  if(/9/.test(q)&&!/b9|#9/.test(q)) iv.push(14);
+  if(/11/.test(q)) iv.push(17);
+  if(/13/.test(q)) iv.push(21);
+  if(/b9/.test(q)) iv.push(13);
+  if(/#9/.test(q)) iv.push(15);
+  if(/b5/.test(q)) iv.push(6);
+  if(/#5/.test(q)) iv.push(8);
+  var bass=null; var sl=s.split('/'); if(sl[1]){ var bm=sl[1].match(/^([A-G])(#|b)?/); if(bm) bass=ROOTS[bm[1]]+(bm[2]==='#'?1:(bm[2]==='b'?-1:0)); }
+  return {root:((root%12)+12)%12, iv:iv, bass:bass, q:q};
+}
+function transposeChord(sym, semi){
+  var m=sym.match(/^([A-G])(#|b)?(.*)$/); if(!m) return sym;
+  var r=ROOTS[m[1]]+(m[2]==='#'?1:(m[2]==='b'?-1:0));
+  r=((r+semi)%12+12)%12; return RN[r]+m[3];
+}
+function moodOf(q){
+  if(/m(?!aj)/.test(q)) return 'min';
+  if(/7/.test(q)&&!/maj/.test(q)) return 'dom';
+  if(/maj/.test(q)) return 'maj';
+  if(/sus/.test(q)) return 'sus';
+  return 'neu';
+}
+
+/* ---------- audio ---------- */
+var AC=null, pending=[];
+function ac(){ if(!AC){ AC=new (window.AudioContext||window.webkitAudioContext)(); } if(AC.state==='suspended') AC.resume(); return AC; }
+function nowt(){ return AC?AC.currentTime:0; }
+function schedNote(midi,t,dur,type,vol,lp){
+  var a=AC, o=a.createOscillator(), g=a.createGain();
+  o.type=type; o.frequency.value=440*Math.pow(2,(midi-69)/12);
+  var head=o;
+  if(lp){ var f=a.createBiquadFilter(); f.type='lowpass'; f.frequency.value=lp; o.connect(f); f.connect(g); } else o.connect(g);
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  g.connect(a.destination); o.start(t); o.stop(t+dur+0.03);
+}
+var STYLE={
+  lofi:{bpm:74, type:'triangle', lp:1150, mel:0.11, ch:0.09, bs:0.16},
+  jazz:{bpm:112, type:'triangle', lp:2600, mel:0.12, ch:0.10, bs:0.17}
+};
+function playCombo(chords, melody, styleKey){
+  var a=ac(); var t0=a.currentTime+0.06; var st=STYLE[styleKey]; var beat=60/st.bpm; var bar=4;
+  chords.forEach(function(ch,i){
+    var p=parseChord(ch); if(!p) return; var bT=t0+i*bar*beat;
+    schedNote(36+p.root, bT, bar*beat*0.92, 'sine', st.bs, st.lp);
+    p.iv.forEach(function(iv,k){ schedNote(60+p.root+iv, bT+k*0.13, bar*beat*0.5, st.type, st.ch, st.lp); });
+    pending.push({t:bT, pc:p.root, mood:moodOf(p.q)});
+  });
+  melody.forEach(function(e){
+    var t=t0+e.startBeat*beat;
+    schedNote(e.midi, t, e.durBeats*beat*0.9, st.type, st.mel, st.lp);
+    pending.push({t:t, pc:((e.midi)%12+12)%12, mood:'mel'});
+  });
+}
+
+/* ---------- visual ---------- */
+var cv=document.getElementById('cv'), cx=cv.getContext('2d'), W,H, DPR=Math.min(2,window.devicePixelRatio||1);
+function resize(){ W=cv.width=innerWidth*DPR; H=cv.height=innerHeight*DPR; cx.setTransform(DPR,0,0,DPR,0,0); W=innerWidth; H=innerHeight; buildGrain(); buildBase(); }
+var baseLayer=null;
+function buildBase(){
+  baseLayer=document.createElement('canvas'); baseLayer.width=W; baseLayer.height=H; var b=baseLayer.getContext('2d');
+  var n=13+Math.floor(Math.random()*6);
+  for(var i=0;i<n;i++){
+    var x0=W*(0.08+Math.random()*0.84), y0=H*(0.12+Math.random()*0.74);
+    var x1=W*(0.08+Math.random()*0.84), y1=H*(0.12+Math.random()*0.74);
+    var cx2=W*(0.08+Math.random()*0.84), cy2=H*(0.08+Math.random()*0.84);
+    var red=Math.random()<0.18;
+    b.strokeStyle= red?'rgba(185,72,53,'+(0.10+Math.random()*0.20).toFixed(3)+')':'rgba(40,36,32,'+(0.08+Math.random()*0.16).toFixed(3)+')';
+    b.lineWidth=0.6+Math.random()*2.8; b.lineCap='round';
+    b.beginPath(); b.moveTo(x0,y0); b.quadraticCurveTo(cx2,cy2,x1,y1); b.stroke();
+  }
+  for(var j=0;j<2;j++){ b.strokeStyle='rgba(205,228,238,0.05)'; b.lineWidth=0.6+Math.random(); b.beginPath(); b.arc(W*(0.2+Math.random()*0.6),H*(0.2+Math.random()*0.6),40+Math.random()*120,0,Math.PI*2); b.stroke(); }
+}
+addEventListener('resize',resize);
+var grain=null;
+function buildGrain(){
+  grain=document.createElement('canvas'); grain.width=W; grain.height=H; var g=grain.getContext('2d');
+  var img=g.createImageData(W,H), d=img.data;
+  for(var i=0;i<d.length;i+=4){ var v=200+Math.random()*55|0; d[i]=d[i+1]=d[i+2]=v; d[i+3]=Math.random()*14|0; }
+  g.putImageData(img,0,0);
+}
+var strokes=[], curHue=30, sweep=0;
+var PAL={ min:[210,40,40], dom:[12,8,8], maj:[32,22,10], sus:[150,18,22], neu:[40,8,8], mel:[20,10,14] };
+function pushStroke(pc,mood){
+  var y=H*(0.78-(pc/11)*0.52);
+  var x=W*0.12+Math.random()*W*0.76;
+  var dx=(Math.random()*2-1)*W*0.22, dy=(Math.random()*2-1)*H*0.16;
+  var col=(Math.random()<0.08)?[185,72,53]:(PAL[mood]||PAL.neu);
+  strokes.push({x:x,y:y,cx:x+dx*0.5+(Math.random()*2-1)*40,cy:y+dy*0.5+(Math.random()*2-1)*40,
+    ex:x+dx,ey:y+dy,life:0,max:1.4+Math.random()*1.6,w:0.8+Math.random()*3.0,a:0.18+Math.random()*0.5,
+    col:col});
+}
+var seedNo='----';
+function frame(){
+  var t=nowt();
+  while(pending.length && pending[0].t<=t){ var e=pending.shift(); curHue=e.pc; pushStroke(e.pc, e.mood); }
+  // ambient: keep the canvas alive even when idle (visual only, no harmonic claim)
+  if(pending.length===0 && strokes.length<70 && Math.random()<0.12){ pushStroke(Math.floor(Math.random()*12), Math.random()<0.14?'dom':'neu'); }
+  // fade
+  cx.fillStyle='rgba(236,233,226,0.05)'; cx.fillRect(0,0,W,H);
+  // glass underlay (translucent, soft)
+  var g=cx.createRadialGradient(W*0.5,H*0.42,40,W*0.5,H*0.5,Math.max(W,H)*0.7);
+  g.addColorStop(0,'rgba(255,255,255,0.05)'); g.addColorStop(0.5,'rgba(220,216,206,0.03)'); g.addColorStop(1,'rgba(180,176,166,0.05)');
+  cx.fillStyle=g; cx.fillRect(0,0,W,H);
+  // persistent generative base (guarantees visible art every frame)
+  if(baseLayer) cx.drawImage(baseLayer,0,0,W,H);
+  // medical cold-light sweep
+  sweep=(sweep+0.4)% (W+300); var sx=sweep-150;
+  var lg=cx.createLinearGradient(sx-60,0,sx+60,0); lg.addColorStop(0,'rgba(200,225,235,0)'); lg.addColorStop(0.5,'rgba(205,228,238,0.06)'); lg.addColorStop(1,'rgba(200,225,235,0)');
+  cx.fillStyle=lg; cx.fillRect(sx-60,0,120,H);
+  // grain
+  if(grain) cx.drawImage(grain,0,0,W,H);
+  // strokes (flowing curves)
+  for(var i=strokes.length-1;i>=0;i--){ var s=strokes[i]; s.life+=0.016;
+    var k=s.life/s.max; if(k>=1){ strokes.splice(i,1); continue; }
+    var al=s.a*(1-k);
+    cx.strokeStyle='rgba('+(s.col[0]+curHue*1.2|0)+','+s.col[1]+','+s.col[2]+','+al.toFixed(3)+')';
+    cx.lineWidth=s.w*(1-0.4*k); cx.lineCap='round';
+    cx.beginPath(); cx.moveTo(s.x,s.y); cx.quadraticCurveTo(s.cx,s.cy,s.ex,s.ey); cx.stroke();
+    // drift for next frame (organic)
+    s.cx+=(Math.random()*2-1)*4; s.cy+=(Math.random()*2-1)*4;
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ---------- flow ---------- */
+var sel={root:null,dens:null};
+var NOTES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+var notesEl=document.getElementById('notes');
+NOTES.forEach(function(n){
+  var el=document.createElement('span'); el.className='nt'; el.textContent=n; el.dataset.r=ROOTS[n];
+  el.onclick=function(){ if(sel.root!==null && this.classList.contains('on')){ this.classList.remove('on'); sel.root=null; document.getElementById('hRoot').classList.add('hidden'); document.getElementById('hDens').classList.add('hidden'); document.getElementById('dens').classList.add('hidden'); document.getElementById('hCard').classList.add('hidden'); document.getElementById('cardWrap').classList.add('hidden'); return; }
+    Array.prototype.forEach.call(notesEl.children,function(c){c.classList.remove('on');});
+    this.classList.add('on'); sel.root=ROOTS[n];
+    playSingle(n);
+    document.getElementById('hRoot').classList.add('hidden');
+    document.getElementById('hDens').classList.remove('hidden');
+    document.getElementById('dens').classList.remove('hidden');
+  };
+  notesEl.appendChild(el);
+});
+function playSingle(n){ var p=parseChord(n+'maj'); if(!p)return; var a=ac(),t0=a.currentTime+0.05; p.iv.forEach(function(iv,k){ schedNote(60+p.root+iv,t0+k*0.12,0.5,'triangle',0.1,1600); }); pending.push({t:t0,pc:p.root,mood:'neu'}); }
+var densEl=document.querySelectorAll('.dm');
+densEl.forEach(function(d){ d.onclick=function(){ if(sel.root===null) return; Array.prototype.forEach.call(densEl,function(x){x.classList.remove('on');}); this.classList.add('on'); sel.dens=+this.dataset.d;
+  var ch=buildChord(sel.root,sel.dens); var a=ac(),t0=a.currentTime+0.05; var p=parseChord(ch); if(p){ p.iv.forEach(function(iv,k){ schedNote(60+p.root+iv,t0+k*0.12,0.6,'triangle',0.1,1600); }); pending.push({t:t0,pc:p.root,mood:moodOf(p.q)}); }
+  document.getElementById('hDens').classList.add('hidden');
+  document.getElementById('hCard').classList.remove('hidden');
+  document.getElementById('cardWrap').classList.remove('hidden');
+};});
+function buildChord(rootSemi,dens){
+  var iv = dens===3?[0,4,7] : dens===5?[0,4,7,9,11] : [0,4,7,10,13,16];
+  var name=RN[rootSemi];
+  if(dens===3) return name+'maj';
+  if(dens===5) return name+'maj9';
+  return name+'maj13';
+}
+document.getElementById('draw').onclick=function(){
+  if(sel.root===null||sel.dens===null) return;
+  var base=buildChord(sel.root,sel.dens);
+  var prog = PROGS[Math.floor(Math.random()*PROGS.length)].slice();
+  var semi = sel.root; // transpose to user root (orig progs are in C/A minor, treat as key-agnostic valid set)
+  var chords=[base].concat(prog.map(function(c){ return transposeChord(c, semi); }));
+  // melody from a random motif, transposed to root
+  var mo=MOT.motifs[Math.floor(Math.random()*MOT.motifs.length)];
+  var melody=(mo.midi_events||[]).map(function(e){ return {midi:e.midi+sel.root, startBeat:e.startBeat, durBeats:e.durBeats}; });
+  var styleKey = Math.random()<0.5?'lofi':'jazz';
+  playCombo(chords, melody, styleKey);
+  seedNo=('000'+Math.floor(Math.random()*10000)).slice(-4);
+  document.getElementById('no').textContent='No.'+seedNo;
+  // reflection (hidden until hover 痕? no — until click trace)
+  var tech=TECHS[Math.floor(Math.random()*TECHS.length)];
+  pendingRefl='靠近：'+tech+'（原书页码待确认）';
+};
+var pendingRefl='';
+document.getElementById('trace').onclick=function(){
+  if(!pendingRefl) return;
+  var r=document.getElementById('refl'); r.textContent=pendingRefl; r.classList.add('show');
+  setTimeout(function(){ r.classList.remove('show'); }, 4200);
+};
+
+/* save 痕 */
+function loadTraces(){ try{return JSON.parse(localStorage.getItem('1oops_traces')||'[]');}catch(e){return [];} }
+document.getElementById('trace').addEventListener('contextmenu',function(e){ e.preventDefault(); var a=loadTraces(); a.push({no:seedNo,ts:Date.now()}); localStorage.setItem('1oops_traces',JSON.stringify(a)); });
+
+resize();
+for(var _b=0;_b<18;_b++){ pushStroke(Math.floor(Math.random()*12), Math.random()<0.15?'dom':'neu'); }
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
