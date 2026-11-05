@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="sYZUz5pDUqDCeCfdBXR5xU"><head data-page-node-id="2bEBFd69n24ZcaSCF4v4jm">
+<meta charset="UTF-8" data-page-node-id="NvCHchsRyb2SxXXToVXKHw">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" data-page-node-id="wHh6EzTvApmPv5E10x5pWr">
+<meta name="theme-color" content="#f5f7f2" data-page-node-id="MuTDUU0BiJrbPRt6sg7JKV">
+<meta name="description" content="息源 BreatheRoot：找到身体不适的上游原因，用 90 秒呼吸练习建立良性循环。" data-page-node-id="VChFnPJmUs8njwhk0HnnZO">
+<title data-page-node-id="1IAznl7O0xA8XRvXSdA5Yc">息源 · 呼吸与体态溯源</title>
+<link rel="stylesheet" href="styles.css" data-page-node-id="Po3eQK2GlV89DUzVnPTF47">
+<style id="__dm_no_drag_style__" data-page-node-id="uIvmYQRCNt4pOIE6HoJFeh">* { -webkit-user-drag: none !important; }</style><style id="__dm_bindable_badge_style__" data-page-node-id="B0D0StECRB5jp1ir8nTPVs">[data-sp-bindable="database"]{outline:1px dashed #0088ff;outline-offset:2px;border-radius:4px;}[data-sp-bindable="database"] *{pointer-events:none !important;transition:none !important;animation:none !important;}[data-sp-bindable="database"]{transition:none !important;animation:none !important;}</style></head>
+<body data-page-node-id="knUOXOCDhMTIMSdwD30onr" style="">
+<div class="app-shell" data-page-node-id="oabelBpy7rDL3AHshRUYGC">
+
+  <header class="topbar" data-page-node-id="SUenmFX2y7MCGPh5SxD0Er">
+    <div class="brand" aria-label="息源 BreatheRoot" data-page-node-id="H0mZlR335pZVrwCCQr2rmf">
+      <svg class="brand-mark" viewBox="0 0 44 44" aria-hidden="true" data-page-node-id="UCb6y3pkl7YCTj4ucKOtRr">
+        <circle cx="22" cy="22" r="20" fill="#e5f0e9" data-page-node-id="mIUNNg8LiJWS43ZzKlNmBS"></circle>
+        <path d="M22 9c-6 6-9 10-9 15a9 9 0 0 0 18 0c0-5-3-9-9-15z" fill="#2d7d63" data-page-node-id="BNTmI5659I8k1CqBJlv8H3"></path>
+        <path d="M22 14v17" stroke="#f5f7f2" stroke-width="1.6" stroke-linecap="round" data-page-node-id="3bmB1yKFj3vFCz78U96szv"></path>
+        <path d="M22 22c4-2 6-4 7-7M22 27c-4-2-6-4-7-7" stroke="#f5f7f2" stroke-width="1.6" stroke-linecap="round" fill="none" data-page-node-id="LrNGkScAAPVOLDeLkzknA7"></path>
+      </svg>
+      <div class="brand-text" data-page-node-id="6Avhwn0blKu7GisoxsjUd6"><strong data-page-node-id="07uXfIXYgZkEIQhQFSfr96" style="">呼吸练习</strong><span data-page-node-id="ipRKzxHBOL7sDfgmzqCWBF" style="white-space: pre-wrap;">BreatheTest · 呼吸测试​​​​</span></div>
+    </div>
+    <div class="top-actions" data-page-node-id="dCwqIs39JHkoaA1Z0V4v8V">
+      <div class="streak-chip" id="streakChip" title="连续练习天数" data-page-node-id="BuYFpWbYnkdzn1KlwOybaq"><span class="flame" data-page-node-id="SlUUhVYBiasoRvFo7sEot7">●</span><span id="streakText" data-page-node-id="Rqz6sRr051k2pr9ShAodQY">第 0 天</span></div>
+      <button class="icon-btn" id="btnData" type="button" title="数据管理" aria-label="数据管理" data-page-node-id="vrVYicJN9phTcxEYRNh3hQ">
+        <svg viewBox="0 0 24 24" aria-hidden="true" data-page-node-id="NRVuz6jyTDru6N5tCPGB4y"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none" data-page-node-id="AZLglqLqB9RyNoLuz7qDNb"></path></svg>
+      </button>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs" aria-label="主导航" data-page-node-id="ZF1Gj8MArrNqFHUfp1Ozb2">
+    <button class="tab active" data-view="today" type="button" data-page-node-id="Al6UQzvNX4IFAybIW9zk4V"><span class="tab-ico" data-page-node-id="Bqi0dSjqZ0syZF6GY02Yo9">◉</span>今日</button>
+    <button class="tab" data-view="trace" type="button" data-page-node-id="Q7XbXMDZuz7LZJz5C6kRhA"><span class="tab-ico" data-page-node-id="yzoowt5by7NlmS7etMOWtE">◇</span>溯源</button>
+    <button class="tab" data-view="practice" type="button" data-page-node-id="GXu3HDECfskbDtG36eXADV"><span class="tab-ico" data-page-node-id="XJDCAln8fBleFMND5xnGSq">◎</span>练习</button>
+    <button class="tab" data-view="plan" type="button" data-page-node-id="6dfnpYRdYr4Znt4jOfP8YH"><span class="tab-ico" data-page-node-id="EKfzQ0t58Qq9BVHw5KZYYz">▤</span>计划</button>
+    <button class="tab" data-view="insight" type="button" data-page-node-id="mWX6boJ836uHbrcGzVpjPh"><span class="tab-ico" data-page-node-id="DkngKoxZ8BLIzZjQFxyg8J">↗</span>看见</button>
+    <button class="tab" data-view="learn" type="button" data-page-node-id="ZpASdfWhypwTpE4ozBMB12"><span class="tab-ico" data-page-node-id="41vxkhCoATomHFsYOsxK0c">✦</span>知识</button>
+  </nav>
+
+  <main id="main" data-page-node-id="8nrjsgQc3RVOrJo8Q9dntM">
+
+    <!-- ============ 今日 ============ -->
+    <section class="view active" id="view-today" data-page-node-id="un2IH8D5fIN3lSzLEmKACq">
+      <div class="hero card" data-page-node-id="flTs0kI3zTs1QmBB5bE3rO">
+        <div class="hero-kicker" id="todayKicker" data-page-node-id="BdzY9mMmyRgLhO1HfcgxeJ">下午了，给身体一个间隔</div>
+        <h1 id="todayGreeting" data-page-node-id="MDN7UAeKIlGbUjzDfBALf4">把注意力放回呼吸，<br data-page-node-id="hw5y3hcD16PpCNFSSjB79q">而不是再逼身体一把。</h1>
+        <p class="hero-sub" id="todaySub" data-page-node-id="oQ79wGRxEAixAHjmFpNobc">疼痛是报警器，不是故障点。先用 90 秒，让身体从「硬撑模式」切回来。</p>
+        <div class="hero-actions" data-page-node-id="Bfj35LCfnojtbVSwPZKcAz">
+          <button class="btn btn-primary btn-lg" id="btnStartToday" type="button" data-page-node-id="QDQ0bpTtWHjavr5CWB2sHa">开始今日 90 秒 <span aria-hidden="true" data-page-node-id="KnwIHJMBoVmuBqxf1QSFLJ">→</span></button>
+          <button class="btn btn-ghost" id="btnGoTrace" type="button" data-page-node-id="a18TacuBYdWtVLPeIQkl2A">先看看我的根源</button>
+        </div>
+        <div class="hero-meta" data-page-node-id="6zpjNFuxyoasT7iid29xlK">
+          <span id="doseHint" data-page-node-id="p2WARJ4qsk45T3PNuTixwP">当前阶段：第 1 周 · 90 秒 / 天</span>
+          <span class="dot" data-page-node-id="LXvnzGLOjR7wYjzD7hytAD">·</span>
+          <span id="graceHint" data-page-node-id="iH6T3OlmuVgEFzo3Ee0EKu">回弹保护：本周可用 1 次</span>
+        </div>
+      </div>
+
+      <div class="grid-2" data-page-node-id="KSW6H20LifEI2tEkLIpObu">
+        <div class="card" data-page-node-id="l6Px01cegpYXvXfop6Q6ev">
+          <div class="card-head" data-page-node-id="dCarOvovrgJjt6oXYjTjGD"><h2 data-page-node-id="cDaX4dPEny2rPstbvcdZZ7">今日的一句话</h2><span class="tag tag-green" data-page-node-id="MuHHYIDCrKCfi0cb29xKDu">实施意图</span></div>
+          <p class="ifthen-line" id="todayIfThen" data-page-node-id="dZsz5Fk5MJ0sw6ZIsIZQwA">如果 <b data-page-node-id="kqNud8USFGlNKWGw1jWhpJ">坐下打开电脑</b>，那么 <b data-page-node-id="YFCBiOGlkIou7dAEIED1yL">先做 3 次 6 秒长呼气</b>。</p>
+          <p class="muted small" id="ifthenHint" data-page-node-id="bbtMvojZXR8lD6kpxZYGdy">把决定提前做完，就不必每天靠意志力重新决定一次。</p>
+          <button class="btn btn-soft btn-sm" id="btnEditIfThen" type="button" data-page-node-id="sNUkPc0qWfw5ZmlHIWAjDj">调整我的锚点</button>
+        </div>
+        <div class="card" data-page-node-id="lbUMPLcncdKXlPB5hjyUSY">
+          <div class="card-head" data-page-node-id="lGGwaNCwjGZsFnp2eGm7X0"><h2 data-page-node-id="Qzm4aEmPm2UUobG2Y21jOk">本周进度</h2><span class="tag tag-sand" id="weekTag" data-page-node-id="DLmpsCJDQSU2Wg7pbVoWGG">第 1 周</span></div>
+          <div class="week-dots" id="weekDots" data-page-node-id="WjXYDofJdLv7CZDOg0GtHO"><div class="week-dot " data-page-node-id="K6ZJZ49fuELu6OO5KxTUSO"><i data-page-node-id="eayJ1LZzEA6zwXENDXVo2X">一</i><span data-page-node-id="BVnh6vq5cyRstmIwNopGpz">一</span></div><div class="week-dot " data-page-node-id="sBV3FHuizJ5MAgnlxX5bH2"><i data-page-node-id="PpnpBryt7QqB9XcDGTQrJU">二</i><span data-page-node-id="xM6ceVCHrK7Ml9uFMWTIcG">二</span></div><div class="week-dot " data-page-node-id="uxDgYINBVxhsHe9yShXFLO"><i data-page-node-id="EPHP50uT4EcBN1BT4wAaNy">三</i><span data-page-node-id="uKdgYlYqmdUHYWeH0FMGN8">三</span></div><div class="week-dot today" data-page-node-id="DLqq4NSbh1TjZh3XbKiRDI"><i data-page-node-id="agMfCSU7QYWFYUNagROPSE">四</i><span data-page-node-id="ePsohDorSkXJGHVyJPPWYg">今天</span></div><div class="week-dot " data-page-node-id="MmHr4UbtzmeezuDxWIdbSz"><i data-page-node-id="HTrHwxhY0lZBP1OdfgGIih">五</i><span data-page-node-id="cyrMPLY84O6WYe7eFABTXe">五</span></div><div class="week-dot " data-page-node-id="RsDyEhVSNfL5GsoJWA3ovn"><i data-page-node-id="Hf30IUV6RdqDc6ldrfunSG">六</i><span data-page-node-id="3ezpVLhjIcsAElH3rtOY2N">六</span></div><div class="week-dot " data-page-node-id="1z2xZ6l07t2FZkPC2zAQyx"><i data-page-node-id="jn88Zvd4t1rnwOASQ7R9bp">日</i><span data-page-node-id="dowCsaISYit2gL4a5F7Boq">日</span></div></div>
+          <div class="stat-row" data-page-node-id="7c7GJ6PMFmshSp2WKvRYca">
+            <div class="stat" data-page-node-id="aFckVYsCTShaKXIDvQGAzb"><strong id="statStreak" data-page-node-id="SKZAAnf9J2M9CujnmGfekH">0</strong><span data-page-node-id="dw8wADt5dkgBYo1wC3OGoh">连续天数</span></div>
+            <div class="stat" data-page-node-id="JJClfPL5oZZtf2N2COFxPB"><strong id="statMinutes" data-page-node-id="PsQ42kqyg8mgQTGTF5zGVx">0</strong><span data-page-node-id="fWyuU3krX2BCXL5AIWiW0D">累计分钟</span></div>
+            <div class="stat" data-page-node-id="UauvfWfuozumaBQJwPFgWB"><strong id="statSessions" data-page-node-id="98vRvlHzidW2XWFtE8VE0P">0</strong><span data-page-node-id="8oHIhyUFkpr84cp2FFLQDK">完成次数</span></div>
+          </div>
+          <div class="progress-wrap" data-page-node-id="zUezXfX2DhENb6flmxYzWh"><div class="progress-bar" data-page-node-id="5DYtRW2mWtKgCUh4NhU2yV"><i id="weekProgress" data-page-node-id="4FH9gzmwFZb2HZmbPRx7hI" style="width: 0%;"></i></div><span class="small muted" id="weekProgressText" data-page-node-id="CkKoBOgciLQAvZrJ9ndMev">本周 0 / 5 天</span></div>
+        </div>
+      </div>
+
+      <div class="card" id="todayCheckinCard" data-page-node-id="3nybM0d4gQUWJnLvslamib">
+        <div class="card-head" data-page-node-id="apRK54MKPkbzzU76fGmbMk"><h2 data-page-node-id="oUg2EeDTJUuWwJEH3m6O6k">今天身体怎么样</h2><span class="small muted" data-page-node-id="bcueSIvEQMVK8B4aiD9usQ">10 秒打卡 · 数据只存在你的浏览器</span></div>
+        <div class="checkin-grid" data-page-node-id="3AbAx9Rl5UDaiwtEFjju54">
+          <label class="field" data-page-node-id="m0zrInOdaZPmmsnYGjBkMD"><span data-page-node-id="WCM72vGmmghc3OUpTVLRFp">不适程度 <em data-page-node-id="mbby0W7Xmr6KbTa4Fiqi9O"><span id="valDiscomfort" data-page-node-id="50e039Yeauk97diFdfuVSg">3</span> / 10</em></span><input type="range" id="inDiscomfort" min="0" max="10" value="3" data-page-node-id="34J1yRVRGE6ZsNfKMUzogI"></label>
+          <label class="field" data-page-node-id="2blhkVMklbZ7coPg398I8i"><span data-page-node-id="Yx2tLghJOA3zNyB71YBic4">睡眠质量 <em data-page-node-id="PjHYOP4owFh0PGQdboVCNH"><span id="valSleep" data-page-node-id="Dg1NqEsncZYzpxJ3sD6IT8">3</span> / 5</em></span><input type="range" id="inSleep" min="1" max="5" value="3" data-page-node-id="OHgue9GkrKOKWHO7OtguU0"></label>
+          <label class="field" data-page-node-id="bCzUG7X8CaPV1j8eDVdfdZ"><span data-page-node-id="NRBxVQkq7Z6G2Gv5zNQb63">精力 <em data-page-node-id="31f3nFTlMaScxdcf3XzAiA"><span id="valEnergy" data-page-node-id="HEfP6RG5PqXn5iyuYm49Cp">3</span> / 5</em></span><input type="range" id="inEnergy" min="1" max="5" value="3" data-page-node-id="XdfivjyCKulpgWrdmZgKT1"></label>
+        </div>
+        <button class="btn btn-soft btn-sm" id="btnSaveCheckin" type="button" data-page-node-id="7NOczPVw0526bQvVRcT5Zt">保存今日记录</button>
+        <span class="inline-note" id="checkinNote" data-page-node-id="OJ38PviXI0voGWsH7v9LYj"></span>
+      </div>
+
+      <div class="card soft-card" data-page-node-id="bF2AeAR0FvKNez33zEYPW1">
+        <div class="card-head" data-page-node-id="870MdODFnzde4YKtrPeReG"><h2 data-page-node-id="Zu3P8f1j9L40XCJ3hHthO8">为什么是「呼气」先</h2><span class="tag tag-outline" data-page-node-id="dUbBYkbtICnK0dsZhQxftB">最小可行剂量</span></div>
+        <div class="mini-chain" id="miniChain" data-page-node-id="1eLavEWUqcXXhLojRs3Q3B"><div class="mini-node" data-page-node-id="TyMzjgHBGdZYm0jI6PfwPI"><b data-page-node-id="EKwjCjAooEi6yYAcZOFhHB">起点</b>呼吸模式</div><span class="mini-arrow" data-page-node-id="bC09JxLY8yAbTT4NP4GvnK">→</span><div class="mini-node" data-page-node-id="JCoeu16dLWx0noSSEnmacP"><b data-page-node-id="Jene4Xjzjn9yWQQz1xZBxS">传导</b>胸廓 / 骨盆</div><span class="mini-arrow" data-page-node-id="bxz5gfB99a40BtvqGBICrF">→</span><div class="mini-node" data-page-node-id="OGO3CxPGNCyec4dLPaIIqr"><b data-page-node-id="gJdXkGXqaTeTcaFN0AXpXK">代偿</b>局部借力</div><span class="mini-arrow" data-page-node-id="NQZjNi5xBj14HQbP2qZEEh">→</span><div class="mini-node" data-page-node-id="QtNUbrNrLHeG0ZeE4sIK78"><b data-page-node-id="Typ39i14BtUhhgPN4JTdC0">下游</b>不适与睡眠</div></div>
+        <p class="small muted" data-page-node-id="aKNfeCwESi9JxA9g1ZnJ9v">不追求一次练到位，只追求「今天没有断」。呼吸模式变成默认设置，比任何一次高强度训练都更难反弹。</p>
+      </div>
+    </section>
+
+    <!-- ============ 溯源 ============ -->
+    <section class="view" id="view-trace" data-page-node-id="rI2X4V1EorJAyWfm1tvplq">
+      <div class="section-intro" data-page-node-id="1J84ZYiHlSRb8z9s574GZT">
+        <span class="eyebrow" data-page-node-id="DwhgCFJKJogvavk3ISCA4O">STEP 01 · 找到上游</span>
+        <h1 data-page-node-id="0SNNq5FAotDrwF4Cgyg2Iu">不适的部位，往往不是问题的源头</h1>
+        <p data-page-node-id="usk1j1DPYV0H4TQi8yJs2j">椎间盘、颈肩、睡眠，常是同一条链条的下游。下面这份 2 分钟自测，会把「报警器」和「起点」分开画给你看。</p>
+      </div>
+
+      <div class="card" id="assessCard" data-page-node-id="qX9EvElJBZLRGQ7QueL4Dr">
+        <div class="card-head" data-page-node-id="HbnQZfF3I4njs24F7kFunl"><h2 data-page-node-id="pVJRRGZsQGsejc3W6P43GO">① 先点一下，哪里最困扰你</h2><span class="small muted" data-page-node-id="FIofBwqqjFw4KBV9p3jjBt">可多选</span></div>
+        <div class="body-layout" data-page-node-id="iVx99Iu0UDHX4YSKyzaRAt">
+          <div class="body-figure" data-page-node-id="lGWkLxxIkxvTYOUjvcfIq8">
+            <svg viewBox="0 0 240 380" id="bodySvg" role="img" aria-label="人体部位示意图" data-page-node-id="lnhJD7FXwbcvGeBAtZzHIk">
+              <defs data-page-node-id="q7qBBg0YK4X4KmZCnMB0Nb">
+                <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1" data-page-node-id="UT0bAVe2KmcyhPuK3iT7Xu"><stop offset="0" stop-color="#dfe9e1" data-page-node-id="88n8lcIklap3pomW8wf3hE"></stop><stop offset="1" stop-color="#cbdcd0" data-page-node-id="RO2YV2wOq1BAntkpPzdMbr"></stop></linearGradient>
+              </defs>
+              <g fill="url(#bodyGrad)" stroke="#a9c2b2" stroke-width="1.2" data-page-node-id="rmmrQu5YFZhodG57cnF549">
+                <circle cx="120" cy="42" r="23" data-page-node-id="BwZ9pC3PF0eusYgeHpQDQa"></circle>
+                <path d="M110 62h20v16l-10 5-10-5z" data-page-node-id="7bH42df7jyLYjmo2yp23Yq"></path>
+                <path d="M88 82q32-11 64 0l7 34-10 78q-29 12-58 0l-10-78z" data-page-node-id="joJEAz8qbzGsDRA8v0ftOF"></path>
+                <path d="M88 84 66 92 48 168l10 5 22-68 8-14zM152 84l22 8 18 76-10 5-22-68-8-14z" data-page-node-id="3Z5FDfZEBdADwsVmsOECdV"></path>
+                <path d="M85 194q35 12 70 0l-4 66-16 96h-16l-10-96-12-42h-8l-6 42-10 96H63l-12-100z" data-page-node-id="lvhKnsWK1WsypCPimLYswD"></path>
+              </g>
+              <g class="hotspots" data-page-node-id="rMEfZB4uv7HfGvcYcIpfLO">
+                <g class="hotspot" data-part="neck" tabindex="0" role="button" aria-label="颈肩" data-page-node-id="1cclzq7OC4ApsQNIh9ayiS"><ellipse cx="120" cy="92" rx="47" ry="19" data-page-node-id="Kin6CDLYWCoxsZZlZ46EMr"></ellipse><text x="120" y="96" data-page-node-id="so23pddrphOCWUaRElH7cm">颈肩</text></g>
+                <g class="hotspot" data-part="chest" tabindex="0" role="button" aria-label="胸背上段" data-page-node-id="kJF7rdEUBVsZiUZn7C685e"><ellipse cx="120" cy="137" rx="36" ry="24" data-page-node-id="Q6tHSgR2FCHIOBtr3p1Hd1"></ellipse><text x="120" y="141" data-page-node-id="E5pdgmGQvc92cZKtuHL6vQ">胸背</text></g>
+                <g class="hotspot" data-part="lumbar" tabindex="0" role="button" aria-label="腰骶" data-page-node-id="8TFqSGX5oRH0pSW2hIIc77"><ellipse cx="120" cy="184" rx="33" ry="20" data-page-node-id="0u78LCPFWBvz9xjVNVpp2O"></ellipse><text x="120" y="188" data-page-node-id="WByY1OzxmNmvLYwh3e7ASK">腰骶</text></g>
+                <g class="hotspot" data-part="hip" tabindex="0" role="button" aria-label="骨盆髋" data-page-node-id="rZ9IfuQ6NjjHH80SGO1qno"><ellipse cx="120" cy="214" rx="36" ry="17" data-page-node-id="4sMTfuS3QOJtVIgWWtQSFT"></ellipse><text x="120" y="218" data-page-node-id="JoJlDcuhLhXGRY7rAdHOBs">骨盆髋</text></g>
+              </g>
+              <g class="source-mark" id="sourceMark" data-page-node-id="S3hxFUGcdgNRTOgespzlNv">
+                <circle cx="120" cy="158" r="8" fill="#e79a55" data-page-node-id="cYVkR8DQrVryfGE8A2EiiJ"></circle>
+              </g>
+            </svg>
+            <div class="figure-legend" data-page-node-id="AJ1f9MFHRDktl5ben5ZY0g"><i data-page-node-id="wPgH9j4FLaCKd0dfLz08SJ"></i>橙色圆点：常见的上游起点（膈肌 / 胸廓）</div>
+          </div>
+          <div class="body-side" data-page-node-id="VDTDSdQ912nwPJXxH9yD3E">
+            <div class="chip-row" id="partChips" data-page-node-id="hbVkCptBubhBbhKRCAv5kY">
+              <button class="chip" data-part="neck" type="button" data-page-node-id="g5e1M2JWtPcmtDHEszQcgv">颈肩僵硬</button>
+              <button class="chip" data-part="chest" type="button" data-page-node-id="LJBach7mXAfJa0OWzjj3OG">胸闷 / 上背</button>
+              <button class="chip" data-part="lumbar" type="button" data-page-node-id="py3QvrtHh7IzFtSHI4z6nu">腰骶 / 椎间盘</button>
+              <button class="chip" data-part="hip" type="button" data-page-node-id="KfNJ36vPee9iu9MQj64EDV">骨盆 / 髋</button>
+              <button class="chip" data-part="sleep" type="button" data-page-node-id="DvrWF0cPKd47tdCGAH8lAG">睡眠被影响</button>
+            </div>
+            <div class="callout" data-page-node-id="Smh4XtFNByXxQc4Mk54oe7">
+              <strong data-page-node-id="ABTjUFD8Ge19xqr93Hhpv2">读图方式</strong>
+              <p data-page-node-id="PxwYUvNa7UOAkn1iUJGzcw">你点亮的区域是「报警器」；橙色标记才是常见的上游起点：呼吸模式决定了胸廓与骨盆的位置，位置决定了谁在替谁干活。</p>
+            </div>
+            <div class="notice small" data-page-node-id="YLUo0iE3jdllRpIwzMUt03">本工具用于自我观察与习惯养成，不构成医学诊断或治疗建议。</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-page-node-id="tPJJABOTfZ8Aq2E6ff6RpU">
+        <div class="card-head" data-page-node-id="iHzTaV1089jaeMfcFMUtWe"><h2 data-page-node-id="cgVILCBzTGz7qwOBilenAG">② 回答 7 个问题</h2><span class="small muted" data-page-node-id="qY1XARRNlzKPxX4Hzug3Xe">凭第一直觉选就好</span></div>
+        <div class="quiz" id="quiz" data-page-node-id="AweXGFEbl6dXzOFQnO2EEm"><div class="quiz-q" data-q="q1" data-page-node-id="A1RGlkuvbaOr5LjIQyjofr"><div class="q-title" data-page-node-id="P4XVaL8BwNaceVmDYbkzzJ">1. 一天里，连续坐着的时间大概多长？</div><div class="q-hint" data-page-node-id="tMnjEUPszKnc6wOpYqwJPk">按最常见的那天算</div><div class="options" data-page-node-id="nFYgruS1JSjvZOyEWrl5oB"><button type="button" class="opt" data-q="q1" data-o="0" data-page-node-id="GwgOl2CUiTDEgnvrl1oPhB">6 小时以上，很少起身</button><button type="button" class="opt" data-q="q1" data-o="1" data-page-node-id="AVHdCqE0GT6I6YLFabicRn">3–6 小时</button><button type="button" class="opt" data-q="q1" data-o="2" data-page-node-id="4DF7nAcmnyon9UQtaJNenG">3 小时以内，经常走动</button><button type="button" class="opt" data-q="q1" data-o="3" data-page-node-id="jPpquXtvUIM9EKUHaBIRkg">说不好，但一天结束时人很沉</button></div></div><div class="quiz-q" data-q="q2" data-page-node-id="b1Gmd1oOCtfF9IBfR3vq8M"><div class="q-title" data-page-node-id="zKxT1uFFWUxZJ5ytpp0OKC">2. 不适最常在什么时候明显？</div><div class="q-hint" data-page-node-id="Z8aA3Yt0MMhECm8QTVvHBi">选最像你的一个</div><div class="options" data-page-node-id="bE8JCbYtip2r1MdMI85nYu"><button type="button" class="opt" data-q="q2" data-o="0" data-page-node-id="lnvlM46XlAiqB313TB7U1E">久坐后、下午到傍晚</button><button type="button" class="opt" data-q="q2" data-o="1" data-page-node-id="TNJboxOKfod9FxBTdMdIDK">用力、搬东西或练完之后</button><button type="button" class="opt" data-q="q2" data-o="2" data-page-node-id="VGW5rA3BFKUy4N1WcbgkBG">站久、刻意「挺直」之后</button><button type="button" class="opt" data-q="q2" data-o="3" data-page-node-id="KZZHvUSOhweb6HHjh2HA58">夜里、快入睡或早上刚醒</button></div></div><div class="quiz-q" data-q="q3" data-page-node-id="6XyNrvhQx1OfMwq1eQPwdS"><div class="q-title" data-page-node-id="8VFcEmvUY8S0NZwl2e2UXc">3. 安静坐着时，呼吸主要动在哪里？</div><div class="q-hint" data-page-node-id="xcjVWePVKSkrAVwu9HwCZ4">现在就可以感受 3 次</div><div class="options" data-page-node-id="hrefN7juYBs4sIg8TeqMHZ"><button type="button" class="opt" data-q="q3" data-o="0" data-page-node-id="GRfWH8JUgE8qMArzeyw3qa">主要是胸口和肩在起伏</button><button type="button" class="opt" data-q="q3" data-o="1" data-page-node-id="iTceHDEzWymJteJJtSZl4G">几乎看不出在动，常忘记呼吸</button><button type="button" class="opt" data-q="q3" data-o="2" data-page-node-id="K8AyDlD4iFIzBrPM7Yhcav">肚子在动，但腰是绷着挺住的</button><button type="button" class="opt" data-q="q3" data-o="3" data-page-node-id="thIdEPLJQTlVkjKSN7p31p">肋骨两侧 / 后腰会微微撑开</button></div></div><div class="quiz-q" data-q="q4" data-page-node-id="82fDKloXfkMfep12xWZVhy"><div class="q-title" data-page-node-id="EEkh1QWiRL9ZSr25IC5BR3">4. 试着深吸一口气，会发生什么？</div><div class="q-hint" data-page-node-id="x3vghPKoDB158w3qFHtiMA">不用真的做到位，回忆一下就好</div><div class="options" data-page-node-id="P77O6Xzfxi8SO1KNTV9q1O"><button type="button" class="opt" data-q="q4" data-o="0" data-page-node-id="NoGJqDBQo9kHXRpZNUDnhX">肩膀、脖子先跟着抬起来</button><button type="button" class="opt" data-q="q4" data-o="1" data-page-node-id="Sbnmqx5q2duEHq3S1bUCR6">会不自觉先憋一下再吸</button><button type="button" class="opt" data-q="q4" data-o="2" data-page-node-id="DYz8wELiSz7em2QOeeOuyu">胸往前顶、腰更塌 / 更挺</button><button type="button" class="opt" data-q="q4" data-o="3" data-page-node-id="QyLgPZt9EtOaTeBq7Onejg">吸不深，像被什么挡住</button></div></div><div class="quiz-q" data-q="q5" data-page-node-id="RMOPManIWRCmD6aPZFpkjN"><div class="q-title" data-page-node-id="KYucifqnRyM4UxRyvyFFp7">5. 运动或用力时，你的习惯更接近？</div><div class="q-hint" data-page-node-id="p1GnpnDJAVBVQ85e5KaTMm">包括拎重物、爬楼、健身</div><div class="options" data-page-node-id="zRxYQbCUw0idJHCy06hjev"><button type="button" class="opt" data-q="q5" data-o="0" data-page-node-id="SpBzsYXMHCmYIeD8WxRs17">会憋气、收紧腹部硬撑</button><button type="button" class="opt" data-q="q5" data-o="1" data-page-node-id="wgmmLHGDlCttuIPHt5xtuW">主要练「弱的地方」，越练越累</button><button type="button" class="opt" data-q="q5" data-o="2" data-page-node-id="4BHFm3qczwGUOHZq771RJ7">很在意姿态标不标准，全程绷着</button><button type="button" class="opt" data-q="q5" data-o="3" data-page-node-id="SswF0y1bPR8Aiog6Kst8E9">容易气短，很快想张嘴喘</button></div></div><div class="quiz-q" data-q="q6" data-page-node-id="4XAouXqSHOtAoAuXDb3cKF"><div class="q-title" data-page-node-id="SpVdFOQsuaFFEB3SiTBWw3">6. 睡眠被影响到哪一步？</div><div class="q-hint" data-page-node-id="zH1RjDL7BXnazCAUgtbDKf">这一题只用来标注下游</div><div class="options" data-page-node-id="0JsjGuJqNBNSHEqOGiOvd7"><button type="button" class="opt" data-q="q6" data-o="0" data-page-node-id="XJMIyqPZFnOOUxLVo3arib">入睡难，脑子停不下来</button><button type="button" class="opt" data-q="q6" data-o="1" data-page-node-id="Xm7O3yutC9WT5USBWjPa8k">夜里翻来覆去找不到舒服姿势</button><button type="button" class="opt" data-q="q6" data-o="2" data-page-node-id="BZz5vMM8VElVACzA3shkeC">醒来像没睡，晨起最僵</button><button type="button" class="opt" data-q="q6" data-o="3" data-page-node-id="OGHw3bvDfdbFDwF6qoHvmo">睡眠基本还行</button></div></div><div class="quiz-q" data-q="q7" data-page-node-id="WdfdHypGXYo5YAXfE24Ccc"><div class="q-title" data-page-node-id="p3k4qrcWSS29dGSaWVUfCV">7. 之前试过什么？停下来之后呢？</div><div class="q-hint" data-page-node-id="JQpY33Z0PobHoZqJKjwYHP">这题决定「反弹」是不是你的主问题</div><div class="options" data-page-node-id="D5IznESvtbi1698YjNtk7l"><button type="button" class="opt" data-q="q7" data-o="0" data-page-node-id="HpTbU1YhxibShxGcdiAnfC">按摩 / 拉伸 / 理疗，停了就回去</button><button type="button" class="opt" data-q="q7" data-o="1" data-page-node-id="hO0OgwEqFR83OLHpkg9QT3">加强健身，练完更累就放弃</button><button type="button" class="opt" data-q="q7" data-o="2" data-page-node-id="4AJFfBtykaFIbhU8G7lf78">护具、靠垫、换椅子，离不开</button><button type="button" class="opt" data-q="q7" data-o="3" data-page-node-id="jYEvKHc4mdCvqGI2lVjsX3">没系统处理过，先忍着</button></div></div></div>
+        <button class="btn btn-primary" id="btnAssess" type="button" data-page-node-id="XysZEHUDxzvLRqRiZJFk5H">生成我的根源链条 <span aria-hidden="true" data-page-node-id="LnOWmP1havK1I2Rv6R7RyS">→</span></button>
+      </div>
+
+      <div class="card result-card" id="resultCard" hidden="" data-page-node-id="vuASR2Ho6wKwLADDWtQACX">
+        <div class="card-head" data-page-node-id="bzZwxvyeJIGByyMwtG4r9N"><h2 data-page-node-id="rW372e0m4aP1HadSxofE6a">你的根源链条</h2><span class="tag tag-green" id="patternTag" data-page-node-id="DoHfUeRnsfFckAM7sKtL2F">—</span></div>
+        <div class="pattern-intro" id="patternIntro" data-page-node-id="H42XZWxPdKcS6F2TLnJ1NP"></div>
+        <div class="chain" id="chainView" data-page-node-id="8aGp3dBoyQ3mUMWfQujkVc"></div>
+        <div class="grid-2 tight" data-page-node-id="qSpzX0D0AJlzONKnyGQjhp">
+          <div class="sub-card" data-page-node-id="ZndK2bE8VRqDU8cbSReWZk">
+            <h3 data-page-node-id="md1wG2QvKiq95T7WLsEX1F">更可能的起点</h3>
+            <p id="rootCause" data-page-node-id="JKqvurWPGrTFvq4uviIy9B"></p>
+          </div>
+          <div class="sub-card" data-page-node-id="1KppeEGPsxFtHkoYbuQDlX">
+            <h3 data-page-node-id="O2G9Jeuz5P8taL2ZgnIPQA">先从这 3 件小事开始</h3>
+            <ol id="threeTips" class="tips" data-page-node-id="8x0ufVB1iaJHH3rD56J4ye"></ol>
+          </div>
+        </div>
+        <div class="result-actions" data-page-node-id="rn8o33xIfiZYRP7aUWg2MT">
+          <button class="btn btn-primary" id="btnFromResult" type="button" data-page-node-id="NOjiUKntYaPDj88SIT6vt5">按我的节律，开始第一次练习</button>
+          <button class="btn btn-ghost" id="btnRetake" type="button" data-page-node-id="dyHwwHMeVPBTUDjdEKAgh5">重新自测</button>
+        </div>
+        <div class="notice small" data-page-node-id="52ipEXR8PbwW8V8trcr53T">若出现进行性麻木、肌力下降、夜间痛醒、大小便异常等情况，请优先就医，不要用练习替代诊疗。</div>
+      </div>
+    </section>
+
+    <!-- ============ 练习 ============ -->
+    <section class="view" id="view-practice" data-page-node-id="4J3xen5N0niHNf3oCjFtZ2">
+      <div class="section-intro" data-page-node-id="a5khHzE3dPy7yfF8ZZav9d">
+        <span class="eyebrow" data-page-node-id="DvDlsArSdAFhABBEDMplDG">STEP 02 · 把不可见变可见</span>
+        <h1 data-page-node-id="4Hhxvdokz4JHfIPVSU7xob">像找发声位置一样，先找到呼吸的位置</h1>
+        <p data-page-node-id="PeIomNWORxljH3BsyVanV1">唱歌要先找共鸣位置，呼吸也一样。初期慢、看起来「什么都没练」，但这是让训练不反弹的地基。</p>
+      </div>
+
+      <div class="card position-card" data-page-node-id="yDgu6fE9z1bpA7PUwPnfr6">
+        <div class="card-head" data-page-node-id="snhUpQwudfCj8bz66Ovzof"><h2 data-page-node-id="yE0k43gyVsRYeWxUHYf1GO">开始之前：3 步定位</h2><span class="small muted" data-page-node-id="9IMujXfvbYt8WGTpANSB3E">约 60 秒</span></div>
+        <div class="steps" id="positionSteps" data-page-node-id="4ZVAmcYjIQ8dEO4ZBTYl7q"><div class="step" data-page-node-id="ylwwP6wqPU7EMFPOlyFQF5"><div class="step-n" data-page-node-id="eTHkR7DI95nR4kMkeWFXWu">STEP 1</div><b data-page-node-id="dHkgHo8pCzPSDHpyeShS0r">把手放好</b><p data-page-node-id="mQNHheZVEhw3RKYZwFvHY6">一手轻放胸口，一手放肋骨两侧或腹部。不纠正、不深呼吸，只是把手放上去。</p></div><div class="step" data-page-node-id="ocmlT0aWno0CtviDmuWNzV"><div class="step-n" data-page-node-id="Oa9nIzheER0LqGPlKP8OOZ">STEP 2</div><b data-page-node-id="fVfsroJuNneNrFiPN6AKW4">观察谁在动</b><p data-page-node-id="jlunAcslaoA6oxQyY5IELK">安静呼吸 5 次，留意哪只手起伏更明显。像找发声的共鸣位置一样，先找，不急着改。</p></div><div class="step" data-page-node-id="C9ks9XpwpeOk8rVWkSCmyG"><div class="step-n" data-page-node-id="1FZFCMvPImewmv4DD1Kmli">STEP 3</div><b data-page-node-id="ZW4ksoCYdSCHaBA8rBdgNF">只改一件事</b><p data-page-node-id="hGhrbTimHDhWrv1iboVIoL">呼气时轻轻让肋骨合拢、肩膀松下来。吸气不用更用力，让「放掉」带走多余的紧张。</p></div></div>
+        <div class="field row-field" data-page-node-id="tngAtC9eiLqACGfeWzqo8d">
+          <label class="check" data-page-node-id="tBUytHJsdmsYGlQAOVLMIs"><input type="checkbox" id="positionDone" data-page-node-id="z4hC4wDaBDQnkh4gLJGuG6"><span data-page-node-id="5cwSJJqarZ9SL4AeoEhklG">我今天能感觉到肋骨 / 腹部随呼吸在动（找不到也没关系，先记下）</span></label>
+        </div>
+      </div>
+
+      <div class="card practice-card" data-page-node-id="FyxQGn3ddUvNc7glMJ3FBr">
+        <div class="practice-controls" data-page-node-id="kDKskvJjEOcl7CUP10RHBo">
+          <div class="control-group" data-page-node-id="FjXn7qrpAotUNOb8hxK3ID">
+            <span class="control-label" data-page-node-id="Qmna1cUFJoxSe8pc8K4O2R">节律</span>
+            <div class="seg" id="paceSeg" data-page-node-id="DK2Nre1IpP1LdMPMp8vXbW">
+              <button class="seg-btn active" data-pace="426" type="button" data-page-node-id="EhkU2axY8v4eaf1e4Obxz0">4·2·6 安抚</button>
+              <button class="seg-btn" data-pace="505" type="button" data-page-node-id="2NoJrMwQ80Va148Q21SHJM">5·0·5 共振</button>
+              <button class="seg-btn" data-pace="444" type="button" data-page-node-id="zHPMqtRyrQ0xvawSuWohxm">4·4·4 方盒</button>
+            </div>
+          </div>
+          <div class="control-group" data-page-node-id="9KC7NxDdOOZYBEZ3qqfxfH">
+            <span class="control-label" data-page-node-id="oBH7jB71HCcUXxNd7oBTbc">时长</span>
+            <div class="seg" id="durationSeg" data-page-node-id="g2KAIUsHAx2ssHg0Cn76k0">
+              <button class="seg-btn active" data-dur="90" type="button" data-page-node-id="iwD3PGyaiA6jMhwzehTQ17">90 秒</button>
+              <button class="seg-btn" data-dur="180" type="button" data-page-node-id="1Yi6sTAx8STUC7jTISFUMo">3 分钟</button>
+              <button class="seg-btn" data-dur="300" type="button" data-page-node-id="s3YigVE9j01fJnvHh38c8j">5 分钟</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="soundscape" data-page-node-id="061mPHn87PsWAM0tWRDBWD">
+          <div class="soundscape-head" data-page-node-id="URIvjYrCBjgwsx46dRsFTl">
+            <div data-page-node-id="3AbJLcUZueEUpjnSagfxmC">
+              <span class="control-label" data-page-node-id="4QuHFYvjyHqlaPUpc9jHCh">自然声景 · 冥想底噪</span>
+              <p class="small muted" id="soundscapeHint" data-page-node-id="D7i0hiCPCDZsOuhCpxm6iL">雨、浪、风、火由浏览器实时合成，无音频采样、无外部素材，因此无版权与授权问题。</p>
+            </div>
+            <div class="vol-control" data-page-node-id="2MEAqH1meqvEgiki52wCxf">
+              <input type="range" id="ambVolume" min="0" max="100" value="45" aria-label="环境音音量" data-page-node-id="UAXAKncB5jBqCuiG9DkCJG">
+              <span id="ambVolText" data-page-node-id="kJRamBv8mTCUFrRUX1n2Tl">45%</span>
+            </div>
+          </div>
+          <div class="sound-grid" id="soundGrid" data-page-node-id="KXpAHAJMVaDTNjIHI6UYy4">
+            <button class="sound-btn active" data-amb="off" type="button" data-page-node-id="KRrbR4DaH2VDkGto6ipxRQ"><i class="dot" data-page-node-id="En1eN8I2Yd3dG5FWsDxQWv"></i>关闭</button>
+            <button class="sound-btn" data-amb="rain" type="button" data-page-node-id="JSMKYEi4FrpXGoJ73lZWY5"><i class="dot" data-page-node-id="5Wn0fb5SyykmAYqYCRhB7H"></i>雨声</button>
+            <button class="sound-btn" data-amb="ocean" type="button" data-page-node-id="xSmaTtwyaNLt5xWIT1GyZE"><i class="dot" data-page-node-id="PElTiSgT8N1KgI0IXiFnpU"></i>海浪</button>
+            <button class="sound-btn" data-amb="stream" type="button" data-page-node-id="RT6CzjEOHakU29hdmvzGPT"><i class="dot" data-page-node-id="2qsEpE6DRjGEMotlB3cuaG"></i>溪流</button>
+            <button class="sound-btn" data-amb="forest" type="button" data-page-node-id="rqdwucWQmWeVEzKdwiI96N"><i class="dot" data-page-node-id="TuH7EaMaBlAZD8AJbd5CaQ"></i>林间风</button>
+            <button class="sound-btn" data-amb="fire" type="button" data-page-node-id="IupBhGtFPXYVumE4BsSLNE"><i class="dot" data-page-node-id="FsgwjXagJFuz0sUDLStDMl"></i>篝火</button>
+            <button class="sound-btn" data-amb="bowl" type="button" data-page-node-id="OkDfEMEfqAAsjx4zoPa7Ku"><i class="dot" data-page-node-id="HieDaUkWmI8V9z6wHm6xUZ"></i>颂钵</button>
+          </div>
+          <div class="soundscape-foot" data-page-node-id="LEsWKLxFwvTxxJ9rcMgX5g">
+            <label class="check compact" data-page-node-id="6S7uQbvxFRQMBIizFkzpFM"><input type="checkbox" id="ambFollow" checked="" data-page-node-id="reOUJQOE9gp6rvqoGdetan"><span data-page-node-id="UBbkgDW8gBQFHOfA3V9tGu">随呼吸起伏：吸气略扬、呼气缓落</span></label>
+            <span class="small muted" id="ambStatus" data-page-node-id="1LA653CaRO4BmuTMSVE6ZP">选一个声音，练习时会自动陪伴并缓缓淡出</span>
+          </div>
+        </div>
+
+        <div class="pacer-wrap" data-page-node-id="A0Xb3L74mj7O0qGVRnDABC">
+          <div class="pacer" id="pacer" data-page-node-id="nAHyPwVIXJ8BLcVESo8JOZ">
+            <svg class="pacer-ring" viewBox="0 0 260 260" aria-hidden="true" data-page-node-id="b8Zm87f9teuIPeFAqBY1y3">
+              <circle cx="130" cy="130" r="120" class="ring-bg" data-page-node-id="ZbvzutzzgayFCFe0wWD2B5"></circle>
+              <circle cx="130" cy="130" r="120" class="ring-fg" id="ringFg" data-page-node-id="64HZdeGByKhV39V1CTOfIa"></circle>
+            </svg>
+            <div class="pacer-orb" id="pacerOrb" data-page-node-id="lyrOkVnSt7p1jahNtKUiKo"></div>
+            <div class="pacer-center" data-page-node-id="JRgMlzFN98PzqSXHOfgkhT">
+              <div class="pacer-phase" id="pacerPhase" data-page-node-id="DTfnQoYTQkoaXygwi7Ovub">准备好了吗</div>
+              <div class="pacer-count" id="pacerCount" data-page-node-id="VMwAZaBZYbfAkV7ptgYu3B">· · ·</div>
+              <div class="pacer-cue" id="pacerCue" data-page-node-id="OrPsOzy3sQWgwDSz8vrYbw">点下方开始，跟着圆一起走</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="practice-bar" data-page-node-id="JneBj4RhmASrwQXXOnHEYG">
+          <span class="small muted" id="practiceClock" data-page-node-id="FknKbkPLrnz70E7eCKkU5J">00:00 / 01:30</span>
+          <span class="small muted" id="cycleCount" data-page-node-id="sLg9UCac4O4csVRKPBciSE">第 0 轮</span>
+          <span class="small muted" id="syncLabel" data-page-node-id="AHeEpl4CpDfCevR0aCzbPI">同步率 —</span>
+        </div>
+        <div class="practice-actions" data-page-node-id="CUHEXeFWUQ9rDoLn2DZlmH">
+          <button class="btn btn-primary btn-lg" id="btnTogglePractice" type="button" data-page-node-id="QE5VYtLEkllSk2fYJaFZQH">开始练习</button>
+          <button class="btn btn-soft" id="btnMicToggle" type="button" data-page-node-id="ANIYtcqqz9MUqd5FjcVHIt">开启麦克风同步（实验）</button>
+          <label class="check compact" data-page-node-id="5WgJ5lKfH19cq9g3ztlWAr"><input type="checkbox" id="soundOn" checked="" data-page-node-id="W4H05DYFuJSi5UlVSk7kfN"><span data-page-node-id="kVQDfx4FAVlJewaVdiec9G">轻柔提示音</span></label>
+        </div>
+        <p class="small muted mic-note" id="micNote" data-page-node-id="7dyJmydR03GGIIx3XX9EN2">麦克风模式会用音量起伏估计你的吸 / 呼，并在结束时给出与引导节律的同步率；不录音、不上传。无法授权时会自动退回手动跟随模式。</p>
+      </div>
+
+      <div class="card" id="finishCard" hidden="" data-page-node-id="XVhcQ1FB25mWluCxfUMKHg">
+        <div class="card-head" data-page-node-id="U5tYNa8GTvtWfLhzSLUqEd"><h2 data-page-node-id="wPzZzpZWuJVto8y63sWO6Q">刚才这一次，身体感觉如何</h2><span class="tag tag-green" id="finishSummary" data-page-node-id="ks0QnTGEgqGEMnmNzIgogO">已完成</span></div>
+        <p class="small muted" data-page-node-id="84agPSajDI9Mk0znbnogDP">给「气顺不顺」打个分。这个主观分数，比训练时长更能预测你会不会继续练下去。</p>
+        <div class="ease-row" id="easeRow" data-page-node-id="u4TStwk3dvD15rSAaE5IOj"><button type="button" class="ease-btn " data-e="1" title="很勉强" data-page-node-id="xUMTBXNrEy2brMG7Fju0P4">1</button><button type="button" class="ease-btn " data-e="2" title="有点别扭" data-page-node-id="IGIDDnH9slnnM8bFAYYMUG">2</button><button type="button" class="ease-btn selected" data-e="3" title="还行" data-page-node-id="GoGt9LpzGWsetTadSlqwJw">3</button><button type="button" class="ease-btn " data-e="4" title="比较顺" data-page-node-id="gAA4RR8OQgTCuCY4xZUG9j">4</button><button type="button" class="ease-btn " data-e="5" title="很顺" data-page-node-id="jRjLzdhsOr8mATF1qLLqHa">5</button><div class="ease-labels" style="width:100%" data-page-node-id="C0gaNqkeSMm5OClCp24wKX"><span data-page-node-id="YthZRtvrcFsPbsc1nbi4mE">很勉强</span><span data-page-node-id="nFWWh4xyvtJeuHzkyroBfv">很顺</span></div></div>
+        <button class="btn btn-primary" id="btnSaveSession" type="button" data-page-node-id="aPiwxPmewu5HLrG1RrvsEa">保存这一次</button>
+        <span class="inline-note" id="sessionNote" data-page-node-id="6A0b0no6quAZ49451gGlr0"></span>
+      </div>
+    </section>
+
+    <!-- ============ 计划 ============ -->
+    <section class="view" id="view-plan" data-page-node-id="IbGKVMzuKtNd9jM5HSYgsA">
+      <div class="section-intro" data-page-node-id="iM20iB9qBCDInRTCVtzwKh">
+        <span class="eyebrow" data-page-node-id="I8IrPyV6MCDoEztkbupsh4">STEP 03 · 不靠意志力的设计</span>
+        <h1 data-page-node-id="oP7w7wJCmGR4KQEkFVQlQC">把练习挂到已经存在的生活里</h1>
+        <p data-page-node-id="hZEgfHSdQiMFZt2ue6JM1h">停下来就反弹，通常不是意志力问题，而是练习没有锚点、没有默认选项、剂量一开始就太大。</p>
+      </div>
+
+      <div class="grid-2" data-page-node-id="xIkmGKNHDRZzT1yiTEF5SE">
+        <div class="card" data-page-node-id="WcqQBBAmGtdBWRLUNaHsbL">
+          <div class="card-head" data-page-node-id="uFTn8kbW6uw0B8ll4kVR9Z"><h2 data-page-node-id="FIAhH7mXVUA22B47R60XS5">实施意图 if → then</h2><span class="tag tag-outline" data-page-node-id="TXpe3oCZhJe9oCXebRQ5zo">承诺装置</span></div>
+          <p class="small muted" data-page-node-id="OFgRgn2WUWGLGV7sGI2u3u">句式越具体，大脑越不需要临场决策。</p>
+          <label class="field" data-page-node-id="aezZKjuPie6TCCCmO99lTd"><span data-page-node-id="xrO97t7Jnv9XUrmSz7eA4s">如果（锚点：一件每天一定发生的事）</span>
+            <select id="anchorSelect" data-page-node-id="Ll8LGXKe53Irj3Piv1QtuC">
+              <option value="坐下打开电脑" data-page-node-id="nW7Fqb0P8VRbbzKMGQsrzP">坐下打开电脑</option>
+              <option value="刷完牙" data-page-node-id="EJHa39wtBmtbjMCcfSCVRQ">刷完牙</option>
+              <option value="等水烧开 / 等咖啡" data-page-node-id="EJRsoh2TfdRDhmAvoHwOBC">等水烧开 / 等咖啡</option>
+              <option value="午饭后坐下" data-page-node-id="9wAM3WZ1uEcGYQeXwvTaX3">午饭后坐下</option>
+              <option value="躺到床上、还没看手机" data-page-node-id="OgAFEBUDvadfmmfWU8tqoF">躺到床上、还没看手机</option>
+              <option value="接完一通电话" data-page-node-id="m5fIWFHmEnHsyWDeISA83c">接完一通电话</option>
+            </select>
+          </label>
+          <label class="field" data-page-node-id="Iya4zKM3fCV8kgeLIZy3U7"><span data-page-node-id="a4cx3eGVYxWLBziTos4TDT">那么（动作：小到不可能失败）</span>
+            <select id="actionSelect" data-page-node-id="cslh92vxMZ2EBCvYD3SnbL">
+              <option value="先做 3 次 6 秒长呼气" data-page-node-id="XyDDXCWcIOJkDYsHb0wL6P">先做 3 次 6 秒长呼气</option>
+              <option value="完成 90 秒引导呼吸" data-page-node-id="D98nzOSgBIuxnZDYTYSY3A">完成 90 秒引导呼吸</option>
+              <option value="一手胸一手腹，观察 5 次呼吸" data-page-node-id="CS02nVESuqx5jYAlp6blJJ">一手胸一手腹，观察 5 次呼吸</option>
+              <option value="做 1 次肋骨向两侧撑开的吸气" data-page-node-id="MEaAYNY6u8p4odM5Agq5nm">做 1 次肋骨向两侧撑开的吸气</option>
+            </select>
+          </label>
+          <div class="ifthen-preview" id="ifthenPreview" data-page-node-id="LZ6bn7cKyqVD8iPRxmzPDu">如果 <b data-page-node-id="lmIf29aAvG5aU0iz5MqmrU">坐下打开电脑</b>，那么 <b data-page-node-id="iJVZBhqQq7GTF3ndQiL6Bq">先做 3 次 6 秒长呼气</b>。</div>
+          <button class="btn btn-primary btn-sm" id="btnSavePlan" type="button" data-page-node-id="9TOsypryWWQXjMxlFhAIWt">保存为我的默认计划</button>
+        </div>
+
+        <div class="card" data-page-node-id="gwctEdawJ1dFrl8NTWu8YC">
+          <div class="card-head" data-page-node-id="pybjozzfzVH10I32RAQkue"><h2 data-page-node-id="AoEARqKJ3WFaPdYhY4INxs">剂量阶梯</h2><span class="tag tag-sand" id="stageTag" data-page-node-id="QADyCclyU4PpI1pGCwdHLS">第 1 周</span></div>
+          <p class="small muted" data-page-node-id="bZ2bHRUUH1DBBoGDiaJyE8">刻意「给少了」：让每次结束都还想再来一点，比一次练到累更容易形成习惯。</p>
+          <div class="ladder" id="ladder" data-page-node-id="fju8CqgUWfuDxQ20zlaTJY"><div class="ladder-row current" data-page-node-id="T0s3BNR7ymo3yDYGunmRE3"><span class="lr-week" data-page-node-id="CmNDmvnqgDipXYGKZRWZNA">第 1 周</span><span class="lr-dose" data-page-node-id="IHmBXPddlc4Xl7buN4mOQq">90 秒 / 天 ← 你在这里</span><span class="lr-note" data-page-node-id="lWfJoepUUuM70wxXBOJrHE">只求不断，不求效果</span></div><div class="ladder-row locked" data-page-node-id="MDsW9VlKpmWQKp2TRetVIQ"><span class="lr-week" data-page-node-id="hTcSynbcdjLGycl609UkyG">第 2 周</span><span class="lr-dose" data-page-node-id="CnLoYtIHCEGU4icIn5L4kL">3 分钟 / 天</span><span class="lr-note" data-page-node-id="iFh9Uj1YWKwBTacFgKkKrF">开始有体感，别急着加量</span></div><div class="ladder-row locked" data-page-node-id="nu8uj7GiP0jRw74HUCh43W"><span class="lr-week" data-page-node-id="M3xJyggx4MxVjmEqpkN4Zq">第 3 周</span><span class="lr-dose" data-page-node-id="DDLsgjF3koJHSCAPdTv6wm">5 分钟 / 天</span><span class="lr-note" data-page-node-id="zvzzvW6pyJzJn467DJtjXm">把节律带到走路、上楼里</span></div><div class="ladder-row locked" data-page-node-id="BREyDIOIqdk59MOALrv5cz"><span class="lr-week" data-page-node-id="LHUbz3aNCmB1eRrBYQZiqH">第 4 周起</span><span class="lr-dose" data-page-node-id="BL5tzBlX7ggaQEX3vLKkDq">日常锚点化</span><span class="lr-note" data-page-node-id="T4KX4KhCvolHRrm8GNfBJx">不打开 App 也会自动做</span></div></div>
+          <div class="callout warm" data-page-node-id="ZTinT0USEioAtHBCgobinA"><strong data-page-node-id="je6eEEv9gMIHYkYm9CPdQ9">回弹保护规则</strong><p data-page-node-id="xwIj0QDSgbnImJERekgVBt">每周有 1 次「漏做不清零」额度。断一天不是失败，只有彻底放弃才会让链条归零 —— 这条规则专门用来对抗全或无思维。</p></div>
+        </div>
+      </div>
+
+      <div class="grid-2" data-page-node-id="b3jXBqPlVK55qA3Wx9pqyL">
+        <div class="card" data-page-node-id="tu54jhYubQD1TPPEJD0OOi">
+          <div class="card-head" data-page-node-id="5X0AJZE5G0PgIltRwf2P2f"><h2 data-page-node-id="cv7lk18AG7r9dItOFbMjaL">把提示放到看得见的地方</h2><span class="small muted" id="envCount" data-page-node-id="YFONTo6k38tDZmYxaFbTpx">0 / 4</span></div>
+          <p class="small muted" data-page-node-id="iSk6jt4lrCxV5WzHI3ULMC">环境线索比提醒通知更可靠。勾掉你已经做过的：</p>
+          <div class="checklist" id="envList" data-page-node-id="4Rxd3gYiSEIRwW5MmhWqY2"><label class="check " data-page-node-id="ArP25tzQSnU9igBwVfOwFV"><input type="checkbox" data-env="0" data-page-node-id="mRr8uEmtrLwClN8lb9uRse"><span data-page-node-id="g5GmTS82SqwE02r0qAbnYj">把椅子调到坐骨能坐实、屏幕略低于视线</span></label><label class="check " data-page-node-id="Nmdz24FwyEfsjS4KVUuAAj"><input type="checkbox" data-env="1" data-page-node-id="dHsx6jTMsWD5781cIOvzOn"><span data-page-node-id="mv1d717eZmObwCf2zGWTEz">在电脑边贴一张写着「先呼气」的小纸条</span></label><label class="check " data-page-node-id="m1VW5DNYMAstVx00YeF6YZ"><input type="checkbox" data-env="2" data-page-node-id="GNdD6uEZxj3Bg6UU5QQqGC"><span data-page-node-id="LuW1cSpGk11D7KejgzDLjY">把本工具加到手机主屏 / 浏览器书签栏</span></label><label class="check " data-page-node-id="tk0h9Xc3zg2HT8CKcY9DAc"><input type="checkbox" data-env="3" data-page-node-id="sjfaFQPExSwvqyPWhNT9it"><span data-page-node-id="uJfJJDfwMw4jZ9nk893wrn">睡前把手机放远一点，留 90 秒给呼吸</span></label></div>
+        </div>
+        <div class="card" data-page-node-id="7VgPuA3lIAzKeY3K0saigX">
+          <div class="card-head" data-page-node-id="6CV3V5dsmhtwCmvNqPoRNf"><h2 data-page-node-id="qDQuwztpFZ4bxPtUeRgPCr">我的承诺卡</h2><span class="tag tag-outline" data-page-node-id="bBqVDHJPEVN9Hivmtc36Z2">可保存图片</span></div>
+          <div class="commit-card" id="commitCard" data-page-node-id="zazJxGVhPCvNjLcsjDpCKW">
+            <div class="commit-kicker" data-page-node-id="X6KprzCwUF3ctADkq5z3c2">BREATHEROOT · 21 天呼吸契约</div>
+            <div class="commit-line" id="commitLine" data-page-node-id="VxpvZbAPkXIIPdcbBaZWQT">我愿意先练呼吸，再谈强度。</div>
+            <div class="commit-ifthen" id="commitIfThen" data-page-node-id="6vLGmZ8VBfd0mHQIhG0HMN">如果 坐下打开电脑，那么 先做 3 次 6 秒长呼气。</div>
+            <div class="commit-sign" id="commitSign" data-page-node-id="kQ3qFNlcOE8749m6W1ZEXR">—— 写给自己的身体</div>
+          </div>
+          <div class="row-actions" data-page-node-id="f2kcsL6XFXRYmw2NLHHa0a">
+            <input class="text-input" id="signInput" placeholder="写下你的称呼（可选）" maxlength="12" data-page-node-id="v50mxH0BAay45ieHWaF2TC">
+            <button class="btn btn-soft btn-sm" id="btnSign" type="button" data-page-node-id="2DeJTYX62EU22NFVraFqZJ">签名</button>
+            <button class="btn btn-soft btn-sm" id="btnDownloadCard" type="button" data-page-node-id="xPjQErUOZmBOaznTaMtLtL">保存为图片</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card soft-card" data-page-node-id="kgYOt138wsR7TWZtgePAUp">
+        <div class="card-head" data-page-node-id="5CnZGlvM04zJlOU7y8ScnT"><h2 data-page-node-id="8yZknqlz5FJNHk7g8YwobR">给产品团队：每个设计对应哪个助推机制</h2><span class="tag tag-green" data-page-node-id="quuTtiCdQ2pVohhwkeSr98">可测量</span></div>
+        <div class="table-wrap" data-page-node-id="8KmbKmVrs2MwXKJ2Y7dHdk"><table class="design-table" id="designTable" data-page-node-id="T27kTCyvCNjBFgwuCvGshk"><thead data-page-node-id="CJGppA9Nn90hjh0l38MSlJ"><tr data-page-node-id="2ZKAVSbpC35rJpx7TSkVz2"><th data-page-node-id="CnaOfAVN4e6cFoAvMyk4M6">设计</th><th data-page-node-id="sG35olP35yYha2AIGXPjEY">行为机制</th><th data-page-node-id="esiHVBbMeFN6bHS6akvxII">防住的失败点</th><th data-page-node-id="TK1sVFV5l2RuG72KVKvMEH">观测指标</th></tr></thead><tbody data-page-node-id="Y40WnaFW3KaKHgHUxZSEG9"><tr data-page-node-id="ZQB2y8rBJiAOkVtSm64dAL"><td data-page-node-id="OucLnEp8oeGzLY75M7HTf7">90 秒最小剂量</td><td data-page-node-id="sEdkHRnLz8kvNq0l6ZipKe">Fogg B=MAP · 降低能力门槛</td><td data-page-node-id="IvpdE3drGV1RBMMi0dOSw7">一想到要练 20 分钟就直接放弃</td><td data-page-node-id="k679XualDnmMVXt5FID0Dw">首练转化率 / 单次完成率</td></tr><tr data-page-node-id="GIqF7O59KeyyZJgROt95Y1"><td data-page-node-id="7mMRTEJc9yxqkFYUSDbzWD">实时呼吸圆 + 环形倒计时</td><td data-page-node-id="elFFvCtHYv8V8Cz9g2YnJK">即时反馈 · 把不可见变可见</td><td data-page-node-id="7Q6G5HVdOk8RVYum8ltMwm">呼吸训练几周才有体感，反馈太慢</td><td data-page-node-id="Xdk54srRucQvZ96mz3A0Ae">完成率 / 平均单次时长</td></tr><tr data-page-node-id="dX6xmvenTDU8cZGbnwyFKp"><td data-page-node-id="YFUPKQwIoFCDy2qe0bPRuR">if → then 实施意图</td><td data-page-node-id="HdQvrQYmCwiIXkSCSIdoa4">Gollwitzer 实施意图 · 预先决策</td><td data-page-node-id="rwUHEMFauPBYooKazIeOch">每天都得靠意志力重新决定</td><td data-page-node-id="D63zEFcZrzZuT865bv6bEl">D7 练习天数</td></tr><tr data-page-node-id="i2oDSEZvzXqxGBri5rDXHR"><td data-page-node-id="RlR6avib8CA3ZvBt9UBR0I">绑定既有锚点</td><td data-page-node-id="AXrfDEEu1Xr8LL5DANh5Wn">习惯叠加 · 环境线索</td><td data-page-node-id="PiAe6sJVUGKU3lmmpeNGsr">额外安排的时间总是被挤掉</td><td data-page-node-id="zwipW0lVDvJCDe2coI11MB">固定时段练习占比</td></tr><tr data-page-node-id="9zDXbsO4CYHgO9dMPnlkSU"><td data-page-node-id="JXWH2JmGJAoiBFE0pcziy3">剂量阶梯 + 周解锁</td><td data-page-node-id="d7mF9bHPlGzq3DxsIRvCeU">目标梯度效应 · 渐进承诺</td><td data-page-node-id="Np6Kh2SAxCZMkpDp7FwP51">一开始就过量，练完更累</td><td data-page-node-id="k0DXXVOEHuoqvkrhRKGHXy">第 2 / 3 周留存</td></tr><tr data-page-node-id="eEJe6PxmkeATvl0F24GBF2"><td data-page-node-id="uU92c3Zx0wNlsMtHajoZuP">回弹保护（每周 1 次不清零）</td><td data-page-node-id="l1spKnFlqKyAxDWQms0BMy">对抗全或无思维 · 损失厌恶</td><td data-page-node-id="LekIvhqhz1cZ27qp7Cu6XI">断一天就彻底放弃</td><td data-page-node-id="xjDOSBk3saBJCFW1NCpU4I">断档后回归率</td></tr><tr data-page-node-id="QbfGF1nV4vK9FUskJyZW9A"><td data-page-node-id="NRlHyEx65jBLzx5NVoPxNq">承诺卡可保存</td><td data-page-node-id="fpeQaqzLCBS11aYyajnj3B">公开承诺 · 身份认同</td><td data-page-node-id="QLBY0zgkulisk1umNZlwDE">「我在试用一个工具」而非「我是这样的人」</td><td data-page-node-id="I5RJy3LuhVMdGiE8h8xllc">签名率 / 分享率</td></tr><tr data-page-node-id="xfti5cKvHzPnOaVcwYVFfP"><td data-page-node-id="3SCM5wD3C8EEGeWVhdASaT">练习 × 不适 / 睡眠同轴图</td><td data-page-node-id="cGRN9QHAvCFNHYpbaWGemT">自我说服 · 相关性反馈</td><td data-page-node-id="Ovxy0SRaCTT4g9JGYmFQeU">长期收益抽象，看不到因果</td><td data-page-node-id="KmB8AIACCCf7TW62Noj21J">打卡率 / 自评变化</td></tr><tr data-page-node-id="tDk6THyR7u9CTgCGsrY1bt"><td data-page-node-id="A8HgJtbPz8f0HbQ73ZizZv">趋势与里程碑</td><td data-page-node-id="spqQ5mcKekVjZP95cHtPTI">可变奖励 · 禀赋效应</td><td data-page-node-id="p3u5krS8fshmZuLq2aCRae">过程无正反馈，动机衰减</td><td data-page-node-id="w7BoVjWuScrYqcML6jvmON">D14 留存</td></tr></tbody></table></div>
+      </div>
+    </section>
+
+    <!-- ============ 看见 ============ -->
+    <section class="view" id="view-insight" data-page-node-id="xm6B7MHxbOzWeO5Fdwk8r1">
+      <div class="section-intro" data-page-node-id="felEdfyzi2toSPXsvrZBgc">
+        <span class="eyebrow" data-page-node-id="oKEXeUUPFadIeXwBbdnodP">STEP 04 · 让因果自己浮现</span>
+        <h1 data-page-node-id="c5QtTNo29cRABGahAF3VPO">最有说服力的，是你自己的数据</h1>
+        <p data-page-node-id="Cc6FgTca7e1UWBimXEYER5">行为改变最难的是「收益来得太慢」。把练习与不适、睡眠放在同一张图上，抽象的长期收益就有了即时反馈。</p>
+      </div>
+
+      <div class="stat-banner" id="statBanner" data-page-node-id="VtXKzhh6aAY75tEmEW4354"><div class="stat-tile" data-page-node-id="YhhA0FH5apgkYOWiYobXuA"><strong data-page-node-id="pBOMEfmGL6hWpbhUdMBBBn">0 天</strong><span data-page-node-id="rSNx1CnqcqRbCxS4JGGQYU">当前连续</span></div><div class="stat-tile" data-page-node-id="9NsuvjCYkJC7yina4rBjH9"><strong data-page-node-id="p44DxNT3LcUul53r6tfyqo">0 分</strong><span data-page-node-id="KsadhpACpZkvRxE9CO8KcZ">累计练习</span></div><div class="stat-tile" data-page-node-id="AOMJm6hAA7K2xTYvQuIHL2"><strong data-page-node-id="0gWftPFvZluYq7HjVhR0Ml">0 天</strong><span data-page-node-id="0MNsw2KVXFSDDjvp6jQoow">身体打卡</span></div><div class="stat-tile" data-page-node-id="o48B4NshdGhZw92AEQEuug"><strong data-page-node-id="WAgG2YKxtAPMXsQfFIGzoy">—</strong><span data-page-node-id="HPDAZHc4CKeq4AgKiyKMM7">平均不适 /10</span></div></div>
+
+      <div class="card" data-page-node-id="syC2miHYHkspecTZwIEjnF">
+        <div class="card-head" data-page-node-id="CcIGaaDC8whPhmHU5GIA4v"><h2 data-page-node-id="oHAsrKZjFRGu46dPWsDcfB">练习 × 身体感受</h2><div class="legend" data-page-node-id="riaWr9LC1xFqNwT5mi6OBr"><span data-page-node-id="rPkrCnDtvYjUbJ1EWvKVbQ"><i class="lg green" data-page-node-id="E3wm2DSFOQwoh3L2IgO5xZ"></i>练习分钟</span><span data-page-node-id="H4BeA8kcDycsIEZn6bzEhL"><i class="lg orange" data-page-node-id="r3e9lM2o2FB8RaAtHOn7l6"></i>不适程度</span><span data-page-node-id="7Pkjl1zElJ8dTLK8Wc1Ezw"><i class="lg blue" data-page-node-id="CnqsGPPUOl7271wxg5fdmi"></i>睡眠质量</span></div></div>
+        <div class="chart-wrap" data-page-node-id="QmqGfyyPSgQ6o6eGHorTh9"><svg id="trendChart" viewBox="0 0 720 260" preserveAspectRatio="none" role="img" aria-label="趋势图" data-page-node-id="WnTnfFGEIxqtIyQdtzTNPx" style="display: none;"></svg></div>
+        <div class="empty-state" id="chartEmpty" data-page-node-id="r3Sdo6MFpHRkQkAgnXwBUu">还没有足够数据。完成一次练习 + 一次打卡，这里就会出现第一条线。</div>
+      </div>
+
+      <div class="grid-2" data-page-node-id="HjhKM0tKVqAoOiS9XlO8eI">
+        <div class="card" data-page-node-id="sPDpvVpbwUf49HxsGSPeC1">
+          <div class="card-head" data-page-node-id="0ni8QJkI0cfvQl3nCKizSM"><h2 data-page-node-id="f5vpGLu8Zx2HTLBK7GKonW">这一周的读数</h2><span class="small muted" data-page-node-id="46ZPyQ5yEociXJ6FWOkD67">自动生成</span></div>
+          <div class="insight-text" id="insightText" data-page-node-id="W7tOV7UblJHgw6mRScJTHy"><span class="big" data-page-node-id="VZllFLs68dfl6XAi7f42ZF">先记录，再判断</span>今天在「今日」页花 10 秒打个卡，完成一次 90 秒练习。几天之后，这张图会替你回答「到底有没有用」。</div>
+        </div>
+        <div class="card" data-page-node-id="ObGiiauNaaY5bfY02Vfh1W">
+          <div class="card-head" data-page-node-id="YXu1vA1ajB9Pz4jytsUcQG"><h2 data-page-node-id="UtQtS35eUYhgV6sGPYl1YZ">里程碑</h2><span class="small muted" data-page-node-id="s6DArPwCWK6XzJw50CMUDM">目标梯度效应</span></div>
+          <div class="badges" id="badges" data-page-node-id="9bL0XIlcRmQGWCGCWWxznk"><div class="badge " data-page-node-id="FyNCMRI1m4BX1rbWrtTqom"><span class="b-ico" data-page-node-id="4fPQa7GPaU0yaaLTLQh9Ma">◇</span>完成根源自测</div><div class="badge " data-page-node-id="mzK2DvmFUoLPfeTZWRl8Mi"><span class="b-ico" data-page-node-id="JVtHd8LBOUZM47qOLhgCZQ">◎</span>第一次练习</div><div class="badge " data-page-node-id="iyCCBv450oFFRheQ3hGe4l"><span class="b-ico" data-page-node-id="Io6nY0PXe8bACJRcHpcQWi">●</span>连续 3 天</div><div class="badge " data-page-node-id="kRyWFlqIQ4xT6Vq6e8ljbz"><span class="b-ico" data-page-node-id="IpplfcKqmW6diMqImFfwaV">★</span>连续 7 天</div><div class="badge " data-page-node-id="pQBh6bTXbDo5FO8EOra173"><span class="b-ico" data-page-node-id="OM6SzhwAUAGi3t171dY5wB">▤</span>累计 10 次</div><div class="badge " data-page-node-id="zE3HNFb1Jzqy2jo9EUjlGs"><span class="b-ico" data-page-node-id="SfEJGyVoPWU5Y1kfl5dDzR">↗</span>累计 30 分钟</div><div class="badge " data-page-node-id="FoCM65J17c4sZVfBvowIKs"><span class="b-ico" data-page-node-id="FP7CkQbwh1KsBEaQenJHCG">✎</span>打卡 7 天</div><div class="badge " data-page-node-id="ckEOLvrslfctn0W6OALmhO"><span class="b-ico" data-page-node-id="QkzPlmtEjyiiNYf11FOo5o">✦</span>写下承诺</div></div>
+        </div>
+      </div>
+
+      <div class="card soft-card" data-page-node-id="mWnhLZf3MvoZnsP99MMO8X">
+        <div class="card-head" data-page-node-id="cidlR0Z83c9kOqHlboODZ3"><h2 data-page-node-id="xBblRDQUPWpztqkcWZAQSa">行为指标看板</h2><span class="tag tag-outline" data-page-node-id="loomr9YkDTMORzqYzglnQ0">产品侧</span></div>
+        <div class="metric-grid" id="metricGrid" data-page-node-id="EkcvjR3ijCBOwTdzaQ34Tj"><div class="metric" data-page-node-id="HxdT9pDivWA93hLyLqh3cK"><span data-page-node-id="IS1zwuFxmk7uaO1p1cdsSz">激活 · 完成根源自测</span><b data-page-node-id="DbOEHRPfBcseKVtRUDgTuV">待完成</b></div><div class="metric" data-page-node-id="QWzQv7noyRCDvbCIAdCUdi"><span data-page-node-id="HkbMf6D9BTQBQa0fNwbmrp">首练转化 · 自测 → 第一次练习</span><b data-page-node-id="gpqOhaqnmcHi0HObpMGSeh">待完成</b></div><div class="metric" data-page-node-id="kii3RqTCnyh7nDny1K9DPJ"><span data-page-node-id="UfvAPGqJe4ZEIB6JMhetHd">近 7 日练习天数 · 习惯形成主指标</span><b data-page-node-id="PJlWxyfRaECUFz7U0FJ52v">0 / 7</b></div><div class="metric" data-page-node-id="clCKpiPWlZOxEeUxRG5ezI"><span data-page-node-id="5WX9z4q0n6KTU0ItdcMJVx">平均单次时长 · 剂量是否过载</span><b data-page-node-id="UFDP3F5lzqXJm3qh8IvSpw">0 秒</b></div><div class="metric" data-page-node-id="sNL6bNQ7t7xqjYZicdW7Tg"><span data-page-node-id="zTTVnDMZhG08kuPvl0iQFI">D1 留存 · 首次练习次日</span><b data-page-node-id="zDjU3gQcLgHBrOJvTsTsmG">—</b></div><div class="metric" data-page-node-id="1MOVBmDVV0xFNPzjMzXfBf"><span data-page-node-id="E163baHqj5bYbUfMQ4AFRm">D7 留存 · 首次练习后第 7 天</span><b data-page-node-id="GLWtFrH2TfKzp7LU92EJfF">—</b></div><div class="metric" data-page-node-id="zquBERRPkytkvtqFfebrBF"><span data-page-node-id="erc6HGkwmRYgjeQOhLMbaJ">回弹保护使用 · 断档后是否回归</span><b data-page-node-id="gVhac07Bgfaiif0vhEprr1">0 次</b></div><div class="metric" data-page-node-id="AvaKW6jrWLOvZpbGcc6ANI"><span data-page-node-id="f0BqQAYz69bauTZtCmVocg">最佳连续 · 坚持度</span><b data-page-node-id="b6JCmg4SsYkPr6VYnTvnUr">0 天</b></div><div class="metric" data-page-node-id="FuahrAHpv3HlkBEAeea8VF"><span data-page-node-id="WyUgJbFNxjGJ7v6QyzbRnB">累计练习次数 · 总量</span><b data-page-node-id="WEUb6VYHb4TaPIqTtiIjvE">0 次</b></div></div>
+        <p class="small muted" data-page-node-id="PMOIjBuBkOiVbSgGAo8oNR">口径：激活 = 完成溯源自测；习惯形成 = 7 日内 ≥5 天有练习记录；坚持 = 第 14 天仍有练习记录。所有指标均来自本地匿名数据，可用于干预方案 A/B 对照。</p>
+      </div>
+    </section>
+
+    <!-- ============ 知识 ============ -->
+    <section class="view" id="view-learn" data-page-node-id="EeYVFdonfxKLkyMK7NtXtT">
+      <div class="section-intro" data-page-node-id="2ZwbGP1pgvT5OTftCPKwmW">
+        <span class="eyebrow" data-page-node-id="R7NKAfcZQAbjl0gvrfNzC4">背后的道理</span>
+        <h1 data-page-node-id="OPYLJ2VvTc2nHMKGdmN7Gi">为什么「练得越狠，越容易反弹」</h1>
+        <p data-page-node-id="hNxyROuD9aVum2LqxVqHwb">这一部分不催你做任何事，只是把身体的工作原理讲清楚。理解机制，本身就是一种助推。</p>
+      </div>
+      <div class="knowledge-grid" id="knowledgeGrid" data-page-node-id="lZE7veTVfoCCAxh4zga9my"><article class="knowledge-card" data-page-node-id="0c7evKDqFPbxc6hxftLehW"><div class="k-num" data-page-node-id="FbkDW2W1bdDl6C1zZT9wpE">01 / MECHANISM</div><h2 data-page-node-id="HP6rDdMkBYOmDLsWzYBDCj">疼痛部位，通常不是问题源头</h2><p data-page-node-id="EGfhaekzkbQZ1q8qSOCzHX">身体很会「借力」：某一处活动度不够，隔壁就多干一点；隔壁累了，再往下一处借。于是最响的报警器（比如腰、颈肩）常常只是链条末端，而不是起点。</p><div class="k-flow" data-page-node-id="IjaJ9Fim9d0nbGfUSXPo0H"><span data-page-node-id="00aTF2aF3UIOAmOADzpxXv">呼吸模式</span><i data-page-node-id="A3Hloe84DQKb8TgzNzmwKs">→</i><span data-page-node-id="EsikIi7j456E8HZIaz3TpA">胸廓 / 骨盆位置</span><i data-page-node-id="XshCKVVFSdS0XSzymBHr5E">→</i><span data-page-node-id="KZQ5bn1xZOFIxBExWNMMAf">代偿用力</span><i data-page-node-id="ZEQTpJpOoa2A2oQhwSLWwe">→</i><span data-page-node-id="NtMxdTnHTMjb6Puq3HTdiG">局部负荷</span><i data-page-node-id="r5i6B53VaVRifp7eIIcPZx">→</i><span data-page-node-id="f9V3BRE5LDDpo6l0H7DRRf">疼痛与睡眠</span></div></article><article class="knowledge-card" data-page-node-id="A5YgoVADXqMGFxYspJawub"><div class="k-num" data-page-node-id="BQFqcikykCc4Edrd01jmD4">02 / MECHANISM</div><h2 data-page-node-id="yT4Ah5uEw8PH9TebcPImLT">呼吸是体态的「默认设置」</h2><p data-page-node-id="rUNGAg3FFfht2ydgRuyMY5">膈肌不只管呼吸，它和腹壁、盆底、腰大肌一起维持躯干的对位。一次完整呼气，是胸廓与骨盆回到中性位的机会；一天约两万次，累积效应远大于每天二十分钟的纠正训练。</p><div class="k-flow" data-page-node-id="9hT7RtXwSujF1g9nCJLDGz"><span data-page-node-id="53d20lHPbplTv8GpvEtImt">吸气 · 胸廓扩张</span><i data-page-node-id="KtoEF14RVBcQImeGDRB3aP">→</i><span data-page-node-id="j2ZJEDa531GhOQKPX5Xwrs">呼气 · 肋骨合拢</span><i data-page-node-id="0cLrsBU10pvk8rFZNqbyQ7">→</i><span data-page-node-id="TIWZ8H7U6nEXeAz76SqQTo">躯干回到中性</span><i data-page-node-id="nPAWgjo2siL2U01ZBDwvHS">→</i><span data-page-node-id="0gszqM1fFbL3cRJ0fMXYzo">局部负荷下降</span></div></article><article class="knowledge-card" data-page-node-id="fm8sgTY10LQVuDB2HqVoHs"><div class="k-num" data-page-node-id="5gO2oJGq7yMsVFlAFdGZaY">03 / MECHANISM</div><h2 data-page-node-id="roiJur0SqCB7D9uRTQe0z8">为什么盲目健身会更累</h2><p data-page-node-id="2fZQHOm9njdELp9CrmsD23">当呼吸还在「上胸 + 屏气」模式时加大强度，身体只能在代偿之上再叠代偿：肩颈帮着吸、腰背帮着稳、交感持续兴奋。训练变成额外消耗，停下来自然立刻反弹。</p><div class="k-flow" data-page-node-id="WAjDe7UA5Wl4O0hgxYWKsD"><span data-page-node-id="J4fNlvM7KVkEvyhziDezGl">强度 ↑</span><i data-page-node-id="mtWRb3Ntm8jUjkFBGmtEas">→</i><span data-page-node-id="XNeE8GBYJ9jh583l2l5Nas">屏气 ↑</span><i data-page-node-id="Yi7HubjYAU9xAtI4TXKTfJ">→</i><span data-page-node-id="q2Bdwm3p8qy0UDrNBQHBwN">代偿 ↑</span><i data-page-node-id="eJqveB6zCiskM4CF5AgBnP">→</i><span data-page-node-id="TdQZ8ln8H8aAXqPcOIWz3w">疲累 ↑</span><i data-page-node-id="E3Z2SjXDAw0lq57gKakpia">→</i><span data-page-node-id="DsGnhyRVbvrEYislUrj4MV">反弹</span></div></article><article class="knowledge-card" data-page-node-id="rTQ8xbDBmn7IfiXjrIF3tF"><div class="k-num" data-page-node-id="pYbDsAjj8fl9nqZdp70UQt">04 / MECHANISM</div><h2 data-page-node-id="u410wKVSlgGqnDTruDygsY">为什么停下来就反弹</h2><p data-page-node-id="tcesuSAl7XbdbsTCPXEwbb">练的是「动作」还是「模式」，决定了反弹与否。动作需要每天重新决定一次，模式是默认发生的。先让呼吸在安静时、走路时、睡前都自动发生，训练效果才有地方留下来。</p><div class="k-flow" data-page-node-id="9EK4iJuP6QjuR49A3Gi6IO"><span data-page-node-id="7E0RtI1t1GBrcaiPnfiBqA">动作层 · 要意志力</span><i data-page-node-id="fmm97OSkKnb0Aef6eYZZhS">→</i><span data-page-node-id="LP4ttHqB3VCPCe9Gji8DcI">→</span><i data-page-node-id="9a1arjYEKxGXrUhB774VDF">→</i><span data-page-node-id="6l8fgw5bgQDMB1kT1DwRBi">模式层 · 自动运行</span></div></article><article class="knowledge-card" data-page-node-id="pSk6nHavG8cKVC0EFhB88d"><div class="k-num" data-page-node-id="fHDTECMDCPKnsNcy2kNLaS">05 / MECHANISM</div><h2 data-page-node-id="sD8puShINGiQ4QLllMdwFU">像找发声位置一样，找呼吸位置</h2><p data-page-node-id="I2sc6bl9BhhoKs8l9sjHq7">学唱歌时，老师不会先让你唱大声，而是先找共鸣位置 —— 找不到位置，练得越多错得越牢。呼吸一样：一手放胸、一手放肋侧或腹部，先观察谁在动，再谈纠正。这个「找位置」的阶段慢，但省掉后面无数弯路。</p><div class="k-flow" data-page-node-id="ZDQbslaqo18UrR7jOR7tYO"><span data-page-node-id="HN0g59L3Zw4pqkjF1L2eEy">观察</span><i data-page-node-id="Jr3hdAsLjqoBQ9JeWEgG6C">→</i><span data-page-node-id="np1ydzczDVYWwUBvRlYWuw">辨认</span><i data-page-node-id="JaAyM4RYJEq4JXarGVgD02">→</i><span data-page-node-id="D9SstixQpD8vsyn94HCFns">轻轻引导</span><i data-page-node-id="ZTMRBivgfAAwYmbhlnbuVz">→</i><span data-page-node-id="YKrBkFbDZ19GOaE45fXtal">变成默认</span></div></article><article class="knowledge-card" data-page-node-id="RGi8mK0AEqL991WCKV6BFS"><div class="k-num" data-page-node-id="iQBW5pHniP5oEl8jGfFuAM">06 / MECHANISM</div><h2 data-page-node-id="nlX9YgFMk9yFiG0fD8rtL7">睡眠是链条最诚实的读数</h2><p data-page-node-id="Am0z58UHSJy4EzDzOb9jQu">呼气偏长、节律变慢，副交感更容易接管，身体才有条件进入修复。反过来，夜里翻身找姿势、晨起僵硬，往往是白天那套「绷住」的模式还没卸下来。所以睡眠改善常比疼痛更早出现。</p><div class="k-flow" data-page-node-id="AhCYLA3KPdCIlyTTbgsCJr"><span data-page-node-id="ONl3pMZ0WjfZyNrm1huL3k">长呼气</span><i data-page-node-id="iK5Uwt2SeDFuA4Kg23dXlR">→</i><span data-page-node-id="VLujcAZxuiODWC0HSVL2KD">副交感接管</span><i data-page-node-id="7osiuaHWeyf1qbfsXiaGGb">→</i><span data-page-node-id="Kpps05ogEsJKpViiDcwnOT">肌张力下降</span><i data-page-node-id="FDZ416pcVMKkcatOZkPBvf">→</i><span data-page-node-id="xhrWGZaeb86jcQ0i5LeXVO">入睡更顺</span></div></article><article class="knowledge-card" data-page-node-id="Y4H5G8FvX8WCIXFjpaJMBN"><div class="k-num" data-page-node-id="MtvxonZ7dVRLi10kuGyL97">07 / MECHANISM</div><h2 data-page-node-id="5EA2x89C4uNZSrGFOOJQHO">自然声帮人「不去努力」</h2><p data-page-node-id="9X1cSgMd3EJ31b6D2NZIYI">呼吸练习最容易失败的地方，是注意力全花在监控自己做得对不对。稳定的雨声或浪声提供一个不要求回应的外部背景，把注意力从「我在练」轻轻挪开；缓慢的声压起伏又与延长呼气同向，等于多了一层不用记数的节拍器。</p><div class="k-flow" data-page-node-id="S0cC4LohXw3wiked45B5VE"><span data-page-node-id="udQuB2GOlxY0xORCrOY070">稳定声景</span><i data-page-node-id="lVFnZxjSIZJiHzuc8c8k5y">→</i><span data-page-node-id="lr9T3UwrpuvD9mOrcliAMR">注意力卸载</span><i data-page-node-id="MZZlyO6g2oUSKaeJZ7L0dK">→</i><span data-page-node-id="bQ1C6cFD4quKhkv4R9KVlp">呼吸自己变慢</span><i data-page-node-id="PoMng3C6IE0LHax15oRjSO">→</i><span data-page-node-id="HXtTAgHC1qBdwx4CTqlqwp">练习更容易坚持</span></div></article><article class="knowledge-card" data-page-node-id="SypZ0zjr6fznCLCNpAMotV"><div class="k-num" data-page-node-id="dqfTHBgeuyNrFjMitTkud1">08 / MECHANISM</div><h2 data-page-node-id="nAiCidjHPPhccAFzuEJYrc">声音从哪来：实时合成，无版权素材</h2><p data-page-node-id="yggACA7yfZFnRNmYnthO3B">这里没有加载任何音频文件。雨、浪、溪、风、火由滤波后的白 / 粉 / 棕噪声加缓慢包络构成；雨滴、气泡、鸟鸣、木柴爆裂与颂钵泛音，都是浏览器里随机生成的短事件。因此不存在采样授权、署名或商用范围问题，离线也能用，页面体积不增加。</p><div class="k-flow" data-page-node-id="SlMyqRx4fhk9Y6ysdoNlXZ"><span data-page-node-id="Z3gFSvzgRhjXLTgAhq6h7P">噪声整形</span><i data-page-node-id="rgpZTmDBoXWNvOMgDyUAVA">→</i><span data-page-node-id="PMNDfDRcJzILlQmH0kcHKT">缓慢包络</span><i data-page-node-id="15JnpRkWbpHyrj1jnDJu4U">→</i><span data-page-node-id="jG1ZoVV1Zhf8FQfsZD0GJL">随机事件</span><i data-page-node-id="of9NYw2dEc5beJcBLQkRbJ">→</i><span data-page-node-id="kHWhtDe4OmabypforXbXt9">呼吸联动</span></div></article></div>
+      <div class="card safety-card" data-page-node-id="ts7JEnhYGfWn4ePEJJHMZB">
+        <div class="card-head" data-page-node-id="hAXdUIDGmpC8DNyImb9zCi"><h2 data-page-node-id="KmOECvw0LazM8k4oz36T4M">安全边界</h2><span class="tag tag-sand" data-page-node-id="DjLCBT40zFy2j60lgpCOsj">请先看这里</span></div>
+        <div class="safety-content" data-page-node-id="XCYXkCIBtaz0wc7ekUlWFz">
+          <p data-page-node-id="7IQNDlUjwopHq9YdfSR9zG">呼吸练习是低强度的自我调节，不是治疗。已有椎间盘突出、明显神经症状或持续睡眠障碍时，请把专业评估放在第一位，练习只作为日常配合。</p>
+          <ul data-page-node-id="JUmbhcr1KnCCAG8ddym0gB">
+            <li data-page-node-id="JHxv9zjc3DXusFHWhyS2cK">出现进行性麻木、肌力下降、夜间痛醒、大小便异常 → 及时就医。</li>
+            <li data-page-node-id="FGZ0fxDRHPdgilZ4HAALog">练习中若出现头晕、手麻、心慌 → 立刻停止，恢复自然呼吸。</li>
+            <li data-page-node-id="KwsBa8QCsep98Rf0EbYGZo">不憋气硬撑、不追求「吸满」，呼气比吸气更重要。</li>
+            <li data-page-node-id="w9spKt9G9idETOrmMOM75b">本工具不采集、不上传任何健康数据；记录仅保存在当前浏览器。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card blueprint-card" data-page-node-id="TNZlNCCtMJtPbb6I96I7sJ">
+        <div class="card-head" data-page-node-id="KEz3NBG72xTfqaWrxBdpQO"><h2 data-page-node-id="Wz9drIAb6OCLIYpdc3bMhe">给产品团队：行为干预蓝图</h2><span class="tag tag-green" data-page-node-id="7lHPeINnqV3UWTA9ogYHd1">COM-B · EAST · Fogg</span></div>
+        <div class="blueprint-grid" data-page-node-id="tzhB5K1BPQr4MKYsI8KgnY">
+          <div class="bp-block" data-page-node-id="B8WO7atEHgDDKSeK4I1qOn">
+            <h3 data-page-node-id="5nqiWj97jFfppJuzcvg8XL">① 目标行为（可观测、可计数）</h3>
+            <p data-page-node-id="TFGspKGrnKFwVcGzV80w6U">不是「重视体态」，而是：<b data-page-node-id="lXUvNcapW8euND4X00dWRn">在每天既有的锚点之后，完成 ≥90 秒以延长呼气为主的呼吸练习，并留下 10 秒身体打卡</b>。行为必须小到不需要额外时间块，才能跨过 Fogg 模型里的「能力」门槛。</p>
+          </div>
+          <div class="bp-block" data-page-node-id="fWLDgBIlppJu658wPi4poZ">
+            <h3 data-page-node-id="zxvXlZWIrA1Tr1bZt8TuGd">② 诊断：为什么现在不会发生</h3>
+            <p data-page-node-id="i25GJJvaUh35Q77EEIy7i1"><b data-page-node-id="9Bb2SRl7HWqBkUPgWDqFiV">能力</b>：找不到呼吸位置、一上来就 20 分钟 → 拆成 3 步定位 + 90 秒剂量。<br data-page-node-id="hBtv8tx5wGB8MW3znoUCTO"><b data-page-node-id="a1s7S81yr1Sa5YoDPPwP8e">机会</b>：没有触发线索 → if-then 锚点 + 环境清单 + 默认节律。<br data-page-node-id="dEoqQF5ch9mbpGGtg8AJYd"><b data-page-node-id="PKj6DizIB1AKJURPAdzqy3">动机</b>：收益延迟、归因为「我不够努力」 → 实时呼吸圆、根因链条、自己的相关性趋势。</p>
+          </div>
+          <div class="bp-block" data-page-node-id="EFXbHZ2XM3j2XMhKOY3Eo3">
+            <h3 data-page-node-id="Sbby6s9aZwwlB2goPf1nJi">③ A/B 实验建议</h3>
+            <p data-page-node-id="wLNYeBjnpqEEUv0fvf2ZMm">四组单因子对照：起始剂量 90 秒 vs 5 分钟；有无 if-then；有无回弹保护；趋势反馈在第 1 天 vs 第 7 天出现。<b data-page-node-id="WEH3dGpZIHuUhoHjOBVBij">主指标</b>：7 日内练习天数；<b data-page-node-id="JvCAmt70HWyEEYRGklTFnd">护栏指标</b>：自评疲累上升率、退出率、误把工具当诊疗的反馈数。</p>
+          </div>
+          <div class="bp-block" data-page-node-id="gU72zAZXlECBAi7beXgwm7">
+            <h3 data-page-node-id="G1rca2duVPmJDCke3P1Y0q">④ 伦理边界（不做的事）</h3>
+            <p data-page-node-id="uNEhgScwVu7EELQ42j9hHB">不用恐惧与羞耻框架；不承诺疗效、不出现「治愈 / 矫正」；不把连续天数做成惩罚；不采集可识别健康数据到云端；红旗症状一律引导就医。助推的目的是让人更容易做自己本来就想做的事，不是制造依赖。</p>
+          </div>
+        </div>
+        <div class="table-wrap" style="margin-top:16px" data-page-node-id="Knt7BEihga4ueKDBcfMDBh">
+          <table class="design-table" data-page-node-id="AG7IB7yBy83ZMPMjY7ujIg">
+            <thead data-page-node-id="yy8AxpaO5IyJLN4LEWbNSY"><tr data-page-node-id="AYFpd4FWsmK1CCGw1V57Qi"><th data-page-node-id="qNxDS8KQVhqI0xYfdPHkQi">漏斗阶段</th><th data-page-node-id="woWuBxgcl7gL16CsQ8Cj7Y">定义</th><th data-page-node-id="6GCKMLmFFrnuZ5Ajfwvw2T">主指标</th><th data-page-node-id="JVqdGNrfZnbLzy8IRwIOz5">本产品的抓手</th></tr></thead>
+            <tbody data-page-node-id="QcmRDALHaEtZuq91fCnW4J">
+              <tr data-page-node-id="NwZQXcglRT83ZRbFy3znwZ"><td data-page-node-id="7HKQm2upxfBxA5KK7R8MyC">激活</td><td data-page-node-id="HTGziotPQgUuiw5CYFsQ0c">完成根源自测</td><td data-page-node-id="UNqfbN4o3bAliHJp8v3oGz">自测完成率</td><td data-page-node-id="Eht9F2CGUNV6BpEA1q18MH">交互式人体图 + 报警器/起点分离</td></tr>
+              <tr data-page-node-id="Alx9kX1PBA2VutnmS3QIzz"><td data-page-node-id="8BOTFOjYKfZoAUzspVnji7">首练</td><td data-page-node-id="LIvPzg6k1jUxESB9BGNkQU">自测后 24h 内完成一次练习</td><td data-page-node-id="s32a6xwje4p8Yn6l8b7IOa">首练转化率</td><td data-page-node-id="jFFlV5JYepDu8QWnBf9qEZ">按模式推荐节律 + 一键开始</td></tr>
+              <tr data-page-node-id="Ixbd4D5Veu6BpCVMH70uRR"><td data-page-node-id="BQxBLXbWFn79DxFbjxbrHx">D1 留存</td><td data-page-node-id="0LaU0uTm9r9bRW8W7AMHCE">次日仍有练习记录</td><td data-page-node-id="EBD2k1gnNF84HZ3cN9a1AI">D1</td><td data-page-node-id="FvOda7f0eZHccNRABXsl4F">今日卡片 + if-then + 最小剂量</td></tr>
+              <tr data-page-node-id="UhCEWfMLgmh5hV4AFgp3Gs"><td data-page-node-id="NgXN3fnIMUmITFVARilRJl">习惯形成</td><td data-page-node-id="lwms4dL0dbUFlCdm0xJjT1">7 日内 ≥5 天有记录</td><td data-page-node-id="4Bip2MkhgMttQbVpyImGcf">D7 练习天数</td><td data-page-node-id="eJ1TC13DuBWs5lHuOSuvn6">周进度、剂量阶梯、回弹保护</td></tr>
+              <tr data-page-node-id="9bTk44wvuNAJ0HVVf3jVxK"><td data-page-node-id="IlgG0GsM6lEV5g78KyLg3n">内化</td><td data-page-node-id="RAg0u2A5ZJu85G81H7y34U">第 21 天仍在使用锚点</td><td data-page-node-id="scgvNLCNzIyY637Hu2qtCe">D21 / 断档回归率</td><td data-page-node-id="HJEP4QmFzOy1oFUTN6z7IG">趋势自证、承诺卡、里程碑</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="bp-road" style="margin-top:16px" data-page-node-id="PZDEYMmtdeS9BSGDK1mX2O">
+          <h3 data-page-node-id="1AnCN3UcnBYRjZdbbtuQ9Z">⑤ 上线产品的演进上限</h3>
+          <div class="k-flow" data-page-node-id="ZLAv031CBM9Ha6IVIJkWCK">
+            <span data-page-node-id="MJbvcE7xhGqNsEI9hFOxmc">L0 本地可用（当前版本）</span><i data-page-node-id="xo7fEL4rXZ0wMS6jFFMKM8">→</i><span data-page-node-id="VDHr6XKBexwmDqrnYSgHXN">L1 账号与跨设备同步</span><i data-page-node-id="oGeC4v2OZUAVqiWQDTR2qV">→</i><span data-page-node-id="71PI4nYSbT8AVoIeSWp5Ho">L2 AI 个性化节律处方</span><i data-page-node-id="82O24CvnQyAULJLrHhSRjE">→</i><span data-page-node-id="PEPJCDaU9thNUK90k26NDj">L3 可穿戴 / HRV 联动</span><i data-page-node-id="hzscMHoE4A1QlP8XbHgvfZ">→</i><span data-page-node-id="EUigLFezWsE1AnmJJzsC3h">L4 企业健康看板 + 临床验证</span>
+          </div>
+          <p class="small muted" style="margin:10px 0 0" data-page-node-id="F1NLGM8f5GGJKSlYyBpxLH">L1 起需要云端数据层与登录；L2 起可基于自测结果、打卡曲线与同步率动态调整节律与剂量；L3 用手表 / 呼吸带把「主观同步率」升级为客观呼吸变异性；L4 输出匿名群体指标与随机对照结果，才具备对外宣称效果的科学基础。</p>
+        </div>
+      </div>
+
+      <div class="about-note" data-page-node-id="GHQgGF8HIHTeTJSrSpz1o1">
+        <strong data-page-node-id="G6zsmcKKl1kayu8JswAPAy">关于这个小工具</strong>
+        <p data-page-node-id="28HOXE9CdjKscREGrDbCRc">它来自一个很具体的困扰：一年里体态发生明显变化，局部椎间盘突出带来的不只是疼，还有睡不着的夜。后来发现，最先要改的不是哪块肌肉，而是呼吸这个被忽略了很久的默认设置。<br data-page-node-id="Cc4I5Kfi3UeGps2IT4DGdI">愿它帮更多人少走一点「越练越累」的弯路。</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer" data-page-node-id="7BLINWBjwROJQ7uGgWP3U3">
+    <span data-page-node-id="Ho06U4kgQVEc1gaPR7UxaF">息源 BreatheRoot · 呼吸体态实验室</span>
+    <span data-page-node-id="DQqEqlUCw7Y5s0wndkGVZ5">自我观察工具，非医疗器械 / 非诊断建议 · 数据仅存本地</span>
+  </footer>
+</div>
+
+<div class="modal-root" id="modalRoot" hidden="" data-page-node-id="ey8BbgKG8xueUzXacw985M">
+  <div class="modal-backdrop" id="modalBackdrop" data-page-node-id="YI5yHvJEbMvXZL6LcYQ01q"></div>
+  <div class="modal card" role="dialog" aria-modal="true" aria-labelledby="modalTitle" data-page-node-id="9DG3WG4FSEQ7S9SUpcLQwm">
+    <div class="card-head" data-page-node-id="nyEirR7ADwcjZq0Tep9joo"><h2 id="modalTitle" data-page-node-id="5wEuutzDQEp36s7u1RCpxW">数据管理</h2><button class="icon-btn" id="btnCloseModal" type="button" aria-label="关闭" data-page-node-id="c6LtkCY9LBSY1SiPm2AG8A">✕</button></div>
+    <div id="modalBody" data-page-node-id="oPeK3O3jPpVcjQ3SBMcEaA"></div>
+  </div>
+</div>
+
+<div class="amb-dock" id="ambDock" data-page-node-id="edNbhTGD9j9y5WZyCOfEvV">
+  <div class="amb-dock-panel" id="ambDockPanel" hidden="" data-page-node-id="BnrWhQxFbvWb03zcycIrvQ">
+    <div class="amb-dock-title" data-page-node-id="Wpd0ZaddL06PsH1A0Ub6WT"><strong data-page-node-id="aK6U61caBpvwkCZ6FZSj6g">自然声景</strong><button class="icon-btn" id="ambDockClose" type="button" aria-label="关闭" data-page-node-id="46eKufUSIpzA1jZ46BTx3v">✕</button></div>
+    <div class="amb-dock-list" id="ambDockList" data-page-node-id="3wR05IGbi3wBmuPyMuMqPn"><button type="button" data-amb="rain" data-page-node-id="x1F0cq9PNwk2Cy9vYomPXh">雨声</button><button type="button" data-amb="ocean" data-page-node-id="feqBl6FMdMM9p6Olu76TKq">海浪</button><button type="button" data-amb="stream" data-page-node-id="KQqBZGGUx5ymYtaV611CK7">溪流</button><button type="button" data-amb="forest" data-page-node-id="yabqH3kLEUxlXe1x4arcan">林间风</button><button type="button" data-amb="fire" data-page-node-id="EjA0PA3zTEvIL7njtR0GfZ">篝火</button><button type="button" data-amb="bowl" data-page-node-id="cykOhTC5iImGmL2jovOdpJ">颂钵</button><button type="button" data-amb="off" class="active" data-page-node-id="aSoHyRjjrqv8zx588YLBbb">关闭</button></div>
+    <div class="vol-control dock-vol" data-page-node-id="8tON3ZItUu4oBtfkVfSsDu">
+      <input type="range" id="ambDockVolume" min="0" max="100" value="45" aria-label="环境音音量" data-page-node-id="XIGoZJHlc6y9wRsbiwfZOA">
+      <span id="ambDockVolText" data-page-node-id="YahQwMeAd299imHAiSY8Or">45%</span>
+    </div>
+    <p class="small muted" style="margin:8px 0 0;line-height:1.55" data-page-node-id="m1HYqehaBuOhi8F05amErh">实时合成 · 不加载任何音频文件 · 无版权素材</p>
+  </div>
+  <button class="amb-dock-btn" id="ambDockBtn" type="button" aria-label="打开自然声景" data-page-node-id="K6ei64g1obUIYi5NQbkDHa">
+    <svg viewBox="0 0 24 24" aria-hidden="true" data-page-node-id="9HUD45WigJjgiM2Fet0PfR"><path d="M4 13v-1a8 8 0 0 1 16 0v1M4 13.5A2.5 2.5 0 0 0 6.5 16H8v-6H6.5A2.5 2.5 0 0 0 4 12.5zM20 13.5a2.5 2.5 0 0 1-2.5 2.5H16v-6h1.5a2.5 2.5 0 0 1 2.5 2.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="AIvnC3afx3fPV0DOEGIeXS"></path></svg>
+    <span id="ambDockLabel" data-page-node-id="uFUcVhoEXwNdpRnodz8Uu4">自然声</span>
+    <i class="dock-dot" id="dockDot" data-page-node-id="3G89yXWahXbnc5afEJoHxz"></i>
+  </button>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" data-page-node-id="lRxjsoPs1ZHTAV2SoAuhQX"></div>
+
+<script src="app.js" data-page-node-id="5Nltl8EvwCnQFHzyq3DH2F"></script>
+
+
+</body></html>
